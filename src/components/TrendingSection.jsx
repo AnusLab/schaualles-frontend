@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Play, X, Star, Calendar } from 'lucide-react';
 
 const TMDB_API_KEY = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzNGViMGQzM2RhZGNkZmNhZjI3ZWM5ZWJiZTBhMGRjZiIsIm5iZiI6MTY0NjQzMTA5Ni45Miwic3ViIjoiNjIyMjhiNzg5MDIwMTIwMDZkNGUxMzJjIiwic2NvcGVzIjpbImFwaV9yZWFkIl0sInZlcnNpb24iOjF9.UJoGbP2Vf9vWy_u6bpWUtiClAuTiHvb8RBPZbEHhiM8";
-const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
-const BACKDROP_BASE_URL = "https://image.tmdb.org/t/p/original";
+const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w342";
+const BACKDROP_BASE_URL = "https://image.tmdb.org/t/p/w1280";
 
 export default function TrendingSection() {
   const [trends, setTrends] = useState([]);
@@ -86,6 +86,8 @@ export default function TrendingSection() {
               <img 
                 src={`${IMAGE_BASE_URL}${item.poster_path}`} 
                 alt={item.title || item.name}
+                loading="lazy"
+                decoding="async"
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
               />
               

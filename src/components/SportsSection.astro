@@ -70,6 +70,10 @@ const features = [
           <Image 
             src={league.image} 
             alt={league.name}
+            width={200}
+            height={200}
+            loading="lazy"
+            decoding="async"
             class="w-auto h-16 md:h-20 object-contain relative z-10 filter grayscale group-hover:grayscale-0 transition-all duration-300 transform group-hover:scale-110"
           />
         </div>

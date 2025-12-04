@@ -9,6 +9,10 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()]
   },
+  
+  build: {
+    inlineStylesheets: 'auto'
+  },
 
   integrations: [react()]
 });

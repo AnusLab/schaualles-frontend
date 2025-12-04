@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | SchauAlles Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in { animation: fadeIn 0.4s ease-out; }
+        .animation-delay-100 { animation-delay: 0.1s; animation-fill-mode: both; }
+        .animation-delay-200 { animation-delay: 0.2s; animation-fill-mode: both; }
+        .animation-delay-300 { animation-delay: 0.3s; animation-fill-mode: both; }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-50 to-slate-100 min-h-screen">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <%- include('partials/sidebar', { currentPage: 'dashboard' }) %>
+
+        <!-- Main Content -->
+        <div class="flex-1 lg:ml-72 overflow-auto">
+            <%- include('partials/topbar') %>
+
+            <!-- Page Content -->
+            <main class="p-6 lg:p-8">
+<!-- Welcome Header -->
+<div class="mb-8 animate-fade-in">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-3xl font-bold text-slate-900 mb-2">Willkommen zurück! 👋</h1>
+            <p class="text-slate-600">Hier ist eine Übersicht Ihrer Inhalte und Aktivitäten.</p>
+        </div>
+        <div class="hidden md:flex items-center gap-3">
+            <a href="/blog/new" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-all shadow-lg shadow-blue-600/30 hover:shadow-blue-600/50 hover:scale-105">
+                <span class="flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    Neuer Beitrag
+                </span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Stats Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <!-- Blog Posts Card -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 hover:shadow-lg transition-all animate-fade-in">
+        <div class="flex items-start justify-between mb-4">
+            <div class="p-3 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl text-white shadow-lg shadow-blue-500/30">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path></svg>
+            </div>
+            <span class="text-xs font-bold px-3 py-1 rounded-full bg-green-100 text-green-700">
+                <%= stats.publishedPosts %> Live
+            </span>
+        </div>
+        <h3 class="text-slate-500 text-sm font-semibold mb-2">Blog Beiträge</h3>
+        <p class="text-4xl font-black text-slate-900 mb-1"><%= stats.blogTotal %></p>
+        <p class="text-xs text-slate-500"><%= stats.draftPosts %> Entwürfe</p>
+    </div>
+
+    <!-- Guides Card -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 hover:shadow-lg transition-all animate-fade-in animation-delay-100">
+        <div class="flex items-start justify-between mb-4">
+            <div class="p-3 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-xl text-white shadow-lg shadow-indigo-500/30">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+            </div>
+        </div>
+        <h3 class="text-slate-500 text-sm font-semibold mb-2">Hilfe Guides</h3>
+        <p class="text-4xl font-black text-slate-900 mb-1"><%= stats.guidesTotal %></p>
+        <p class="text-xs text-slate-500">Veröffentlicht</p>
+    </div>
+
+    <!-- Total Views Card -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 hover:shadow-lg transition-all animate-fade-in animation-delay-200">
+        <div class="flex items-start justify-between mb-4">
+            <div class="p-3 bg-gradient-to-br from-amber-500 to-amber-600 rounded-xl text-white shadow-lg shadow-amber-500/30">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+            </div>
+            <span class="text-xs font-bold px-3 py-1 rounded-full bg-blue-100 text-blue-700">
+                +12%
+            </span>
+        </div>
+        <h3 class="text-slate-500 text-sm font-semibold mb-2">Gesamt Aufrufe</h3>
+        <p class="text-4xl font-black text-slate-900 mb-1"><%= stats.totalViews.toLocaleString('de-DE') %></p>
+        <p class="text-xs text-slate-500">Alle Guides</p>
+    </div>
+
+    <!-- Quick Actions Card -->
+    <div class="bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl p-6 shadow-lg shadow-blue-600/30 text-white animate-fade-in animation-delay-300">
+        <h3 class="text-sm font-semibold mb-4 text-blue-100">Schnellaktionen</h3>
+        <div class="space-y-2">
+            <a href="/blog/new" class="block px-4 py-2.5 bg-white/10 hover:bg-white/20 rounded-xl font-medium transition-all backdrop-blur-sm border border-white/10">
+                + Neuer Blog
+            </a>
+            <a href="/guides/new" class="block px-4 py-2.5 bg-white/10 hover:bg-white/20 rounded-xl font-medium transition-all backdrop-blur-sm border border-white/10">
+                + Neuer Guide
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Content Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!-- Recent Blog Posts -->
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="p-6 border-b border-slate-100 flex items-center justify-between">
+            <h2 class="text-lg font-bold text-slate-900">Neueste Blog Beiträge</h2>
+            <a href="/blog" class="text-sm font-semibold text-blue-600 hover:text-blue-700">Alle ansehen →</a>
+        </div>
+        <div class="divide-y divide-slate-100">
+            <% if (recentPosts && recentPosts.length > 0) { %>
+                <% recentPosts.forEach((post, index) => { %>
+                    <a href="/blog/edit/<%= post.id %>" class="block p-5 hover:bg-slate-50 transition-colors group">
+                        <div class="flex items-start justify-between">
+                            <div class="flex-1">
+                                <h3 class="font-semibold text-slate-900 group-hover:text-blue-600 transition-colors mb-1"><%= post.title %></h3>
+                                <p class="text-xs text-slate-500">
+                                    <%= new Date(post.created_at).toLocaleDateString('de-DE', { day: '2-digit', month: 'short', year: 'numeric' }) %>
+                                </p>
+                            </div>
+                            <span class="px-2.5 py-1 rounded-full text-xs font-bold <%= post.status === 'published' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700' %>">
+                                <%= post.status === 'published' ? 'Live' : 'Entwurf' %>
+                            </span>
+                        </div>
+                    </a>
+                <% }); %>
+            <% } else { %>
+                <div class="p-8 text-center text-slate-500">
+                    <svg class="w-12 h-12 mx-auto mb-3 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path></svg>
+                    <p class="text-sm font-medium">Noch keine Blog Beiträge</p>
+                    <a href="/blog/new" class="text-sm text-blue-600 hover:text-blue-700 font-semibold mt-2 inline-block">Ersten Beitrag erstellen →</a>
+                </div>
+            <% } %>
+        </div>
+    </div>
+
+    <!-- Recent Guides -->
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="p-6 border-b border-slate-100 flex items-center justify-between">
+            <h2 class="text-lg font-bold text-slate-900">Neueste Guides</h2>
+            <a href="/guides" class="text-sm font-semibold text-blue-600 hover:text-blue-700">Alle ansehen →</a>
+        </div>
+        <div class="divide-y divide-slate-100">
+            <% if (recentGuides && recentGuides.length > 0) { %>
+                <% recentGuides.forEach((guide, index) => { %>
+                    <a href="/guides/edit/<%= guide.id %>" class="block p-5 hover:bg-slate-50 transition-colors group">
+                        <div class="flex items-start justify-between">
+                            <div class="flex-1">
+                                <h3 class="font-semibold text-slate-900 group-hover:text-blue-600 transition-colors mb-1"><%= guide.title %></h3>
+                                <p class="text-xs text-slate-500">
+                                    <%= new Date(guide.created_at).toLocaleDateString('de-DE', { day: '2-digit', month: 'short', year: 'numeric' }) %>
+                                </p>
+                            </div>
+                            <div class="flex items-center gap-2 text-xs text-slate-500">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                                <%= guide.views || 0 %>
+                            </div>
+                        </div>
+                    </a>
+                <% }); %>
+            <% } else { %>
+                <div class="p-8 text-center text-slate-500">
+                    <svg class="w-12 h-12 mx-auto mb-3 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                    <p class="text-sm font-medium">Noch keine Guides</p>
+                    <a href="/guides/new" class="text-sm text-blue-600 hover:text-blue-700 font-semibold mt-2 inline-block">Ersten Guide erstellen →</a>
+                </div>
+            <% } %>
+        </div>
+    </div>
+</div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Mobile sidebar toggle
+        const sidebarToggle = document.getElementById('sidebar-toggle');
+        const sidebar = document.getElementById('sidebar');
+        
+        if (sidebarToggle && sidebar) {
+            sidebarToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('-translate-x-full');
+            });
+        }
+    </script>
+</body>
+</html>

@@ -21,6 +21,24 @@ const { title, description = "Premium IPTV Service - SchauAlles.com" } = Astro.p
 		<meta name="description" content={description} />
 		<title>{title}</title>
 		
+		<!-- SEO Meta Tags -->
+		<link rel="canonical" href={Astro.url.href} />
+		<link rel="sitemap" href="/sitemap.xml" />
+		<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+		
+		<!-- Open Graph / Facebook -->
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content={Astro.url.href} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:site_name" content="SchauAlles.com" />
+		
+		<!-- Twitter -->
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:url" content={Astro.url.href} />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+		
 		<!-- DNS Prefetch & Preconnect for faster external resource loading -->
 		<link rel="dns-prefetch" href="https://fonts.googleapis.com">
 		<link rel="dns-prefetch" href="https://fonts.gstatic.com">

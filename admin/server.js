@@ -245,15 +245,40 @@ app.get('/logout', (req, res) => {
 });
 
 // Dashboard
-app.get('/', requireAuth, (req, res) => {
-    res.render('dashboard');
+app.get('/', requireAuth, async (req, res) => {
+    try {
+        // Fetch statistics
+        const [blogCount] = await pool.execute('SELECT COUNT(*) as count FROM blog_posts');
+        const [guidesCount] = await pool.execute('SELECT COUNT(*) as count FROM help_guides');
+        const [totalViews] = await pool.execute('SELECT SUM(views) as total FROM help_guides');
+        const [recentPosts] = await pool.execute('SELECT id, title, status, created_at FROM blog_posts ORDER BY created_at DESC LIMIT 5');
+        const [recentGuides] = await pool.execute('SELECT id, title, views, created_at FROM help_guides ORDER BY created_at DESC LIMIT 5');
+        const [publishedPosts] = await pool.execute('SELECT COUNT(*) as count FROM blog_posts WHERE status = "published"');
+        const [draftPosts] = await pool.execute('SELECT COUNT(*) as count FROM blog_posts WHERE status = "draft"');
+        
+        res.render('dashboard-new', {
+            stats: {
+                blogTotal: blogCount[0].count,
+                guidesTotal: guidesCount[0].count,
+                totalViews: totalViews[0].total || 0,
+                publishedPosts: publishedPosts[0].count,
+                draftPosts: draftPosts[0].count
+            },
+            recentPosts,
+            recentGuides,
+            currentPage: 'dashboard'
+        });
+    } catch (err) {
+        console.error('Dashboard error:', err);
+        res.status(500).send(err.message);
+    }
 });
 
 // Blog Routes
 app.get('/blog', requireAuth, async (req, res) => {
     try {
         const [posts] = await pool.execute('SELECT * FROM blog_posts ORDER BY created_at DESC');
-        res.render('blog/index', { posts });
+        res.render('blog/index-new', { posts, currentPage: 'blog' });
     } catch (err) {
         res.status(500).send(err.message);
     }
@@ -303,7 +328,7 @@ app.post('/blog/save', requireAuth, async (req, res) => {
 app.get('/guides', requireAuth, async (req, res) => {
     try {
         const [guides] = await pool.execute('SELECT * FROM help_guides ORDER BY created_at DESC');
-        res.render('guides/index', { guides });
+        res.render('guides/index-new', { guides, currentPage: 'guides' });
     } catch (err) {
         res.status(500).send(err.message);
     }
@@ -352,7 +377,7 @@ app.post('/guides/save', requireAuth, async (req, res) => {
 app.get('/pages', requireAuth, async (req, res) => {
     try {
         const [pages] = await pool.execute('SELECT * FROM pages_seo ORDER BY page_identifier');
-        res.render('pages/index', { pages });
+        res.render('pages/index-new', { pages, currentPage: 'pages' });
     } catch (err) {
         res.status(500).send(err.message);
     }
@@ -389,7 +414,7 @@ app.get('/settings', requireAuth, async (req, res) => {
         rows.forEach(row => {
             settings[row.setting_key] = row.setting_value;
         });
-        res.render('settings', { settings });
+        res.render('settings-new', { settings, currentPage: 'settings' });
     } catch (err) {
         res.status(500).send(err.message);
     }

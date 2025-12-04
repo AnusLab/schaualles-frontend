@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seiten SEO | SchauAlles Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-50 to-slate-100 min-h-screen">
+    <div class="flex h-screen overflow-hidden">
+        <%- include('../partials/sidebar', { currentPage: 'pages' }) %>
+        
+        <div class="flex-1 lg:ml-72 overflow-auto">
+            <%- include('../partials/topbar') %>
+            
+            <main class="p-6 lg:p-8">
+                <!-- Header -->
+                <div class="flex items-center justify-between mb-8">
+                    <div>
+                        <h1 class="text-3xl font-bold text-slate-900 mb-2">Seiten SEO</h1>
+                        <p class="text-slate-600">Verwalten Sie SEO-Einstellungen für Ihre Seiten</p>
+                    </div>
+                </div>
+
+                <!-- Pages Grid -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                    <% if (pages && pages.length > 0) { %>
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead class="bg-slate-50 border-b border-slate-200">
+                                    <tr>
+                                        <th class="px-6 py-4 text-left text-xs font-bold text-slate-600 uppercase tracking-wider">Seite</th>
+                                        <th class="px-6 py-4 text-left text-xs font-bold text-slate-600 uppercase tracking-wider">Route</th>
+                                        <th class="px-6 py-4 text-left text-xs font-bold text-slate-600 uppercase tracking-wider">Meta Titel</th>
+                                        <th class="px-6 py-4 text-left text-xs font-bold text-slate-600 uppercase tracking-wider">Aktualisiert</th>
+                                        <th class="px-6 py-4 text-right text-xs font-bold text-slate-600 uppercase tracking-wider">Aktionen</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-100">
+                                    <% pages.forEach((page) => { %>
+                                        <tr class="hover:bg-slate-50 transition-colors">
+                                            <td class="px-6 py-4">
+                                                <div class="flex items-center gap-3">
+                                                    <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">
+                                                        <%= page.page_identifier.substring(0, 2).toUpperCase() %>
+                                                    </div>
+                                                    <div>
+                                                        <div class="font-semibold text-slate-900"><%= page.page_identifier %></div>
+                                                        <div class="text-xs text-slate-500"><%= page.route %></div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                <code class="px-2 py-1 bg-slate-100 text-slate-700 rounded text-sm font-mono"><%= page.route %></code>
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                <div class="text-sm text-slate-900 max-w-xs truncate"><%= page.title || '-' %></div>
+                                            </td>
+                                            <td class="px-6 py-4 text-sm text-slate-600">
+                                                <%= new Date(page.updated_at).toLocaleDateString('de-DE') %>
+                                            </td>
+                                            <td class="px-6 py-4 text-right">
+                                                <a href="/pages/edit/<%= page.id %>" class="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg font-medium transition-colors">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                                                    Bearbeiten
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    <% }); %>
+                                </tbody>
+                            </table>
+                        </div>
+                    <% } else { %>
+                        <div class="p-12 text-center">
+                            <svg class="w-16 h-16 mx-auto mb-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                            <h3 class="text-lg font-semibold text-slate-900 mb-2">Keine Seiten gefunden</h3>
+                            <p class="text-slate-600">Es wurden keine Seiten in der Datenbank gefunden.</p>
+                        </div>
+                    <% } %>
+                </div>
+
+                <!-- Info Box -->
+                <div class="mt-6 bg-blue-50 border border-blue-200 rounded-xl p-6">
+                    <div class="flex gap-4">
+                        <div class="flex-shrink-0">
+                            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-semibold text-blue-900 mb-1">SEO Hinweis</h3>
+                            <p class="text-sm text-blue-700">Diese Einstellungen werden automatisch in die Meta-Tags Ihrer Seiten eingefügt. Achten Sie auf optimale Längen: Titel max. 60 Zeichen, Beschreibung max. 160 Zeichen.</p>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        const sidebarToggle = document.getElementById('sidebar-toggle');
+        const sidebar = document.getElementById('sidebar');
+        
+        if (sidebarToggle && sidebar) {
+            sidebarToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('-translate-x-full');
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+---
+import { Menu, X, MonitorPlay } from 'lucide-react';
+import Logo from './Logo.astro';
+---
+
+<header class="fixed w-full bg-white/90 backdrop-blur-lg border-b border-slate-100 z-50 transition-all duration-300 h-20 md:h-24 flex items-center">
+  <div class="max-w-[90rem] w-full mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center">
+      <!-- Logo -->
+      <div class="flex-shrink-0 flex items-center">
+        <a href="/" class="flex items-center hover:opacity-90 transition-opacity">
+          <Logo class="scale-90 md:scale-100" />
+        </a>
+      </div>
+
+      <!-- Desktop Navigation -->
+      <nav class="hidden md:flex space-x-10 items-center">
+        <a href="/#features" class="text-slate-600 hover:text-brand-600 transition-colors font-semibold text-base tracking-wide">Funktionen</a>
+        <a href="/#pricing" class="text-slate-600 hover:text-brand-600 transition-colors font-semibold text-base tracking-wide">Preise</a>
+        <a href="/blog" class="text-slate-600 hover:text-brand-600 transition-colors font-semibold text-base tracking-wide">Blog</a>
+        <a href="/hilfe" class="text-slate-600 hover:text-brand-600 transition-colors font-semibold text-base tracking-wide">Hilfe</a>
+        <a href="/kontakt" class="text-slate-600 hover:text-brand-600 transition-colors font-semibold text-base tracking-wide">Kontakt</a>
+        <a href="/#pricing" class="bg-brand-600 text-white px-8 py-3 rounded-full font-bold hover:bg-brand-700 transition-all shadow-lg shadow-brand-500/20 hover:scale-105 transform flex items-center gap-2">
+          Jetzt bestellen
+          <MonitorPlay className="w-5 h-5" />
+        </a>
+      </nav>
+
+
+      <!-- Mobile menu button -->
+      <div class="md:hidden flex items-center">
+        <button id="mobile-menu-btn" class="text-slate-600 hover:text-brand-600 focus:outline-none p-2">
+          <Menu className="h-8 w-8" />
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Navigation -->
+  <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-slate-100 absolute top-[80px] w-full left-0 shadow-2xl">
+    <div class="px-6 pt-4 pb-8 space-y-2">
+      <a href="/#features" class="block px-4 py-3 text-lg font-medium text-slate-700 hover:text-brand-600 hover:bg-brand-50 rounded-xl transition-colors">Funktionen</a>
+      <a href="/#pricing" class="block px-4 py-3 text-lg font-medium text-slate-700 hover:text-brand-600 hover:bg-brand-50 rounded-xl transition-colors">Preise</a>
+      <a href="/blog" class="block px-4 py-3 text-lg font-medium text-slate-700 hover:text-brand-600 hover:bg-brand-50 rounded-xl transition-colors">Blog</a>
+      <a href="/hilfe" class="block px-4 py-3 text-lg font-medium text-slate-700 hover:text-brand-600 hover:bg-brand-50 rounded-xl transition-colors">Hilfe</a>
+      <a href="/kontakt" class="block px-4 py-3 text-lg font-medium text-slate-700 hover:text-brand-600 hover:bg-brand-50 rounded-xl transition-colors">Kontakt</a>
+      <div class="pt-4">
+        <a href="/#pricing" class="block w-full text-center bg-brand-600 text-white px-6 py-4 rounded-xl font-bold text-lg hover:bg-brand-700 shadow-lg shadow-brand-500/20">
+          Jetzt bestellen
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<script>
+  const btn = document.getElementById('mobile-menu-btn');
+  const menu = document.getElementById('mobile-menu');
+
+  btn?.addEventListener('click', () => {
+    menu?.classList.toggle('hidden');
+  });
+
+  // Close menu when clicking a link
+  menu?.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      menu?.classList.add('hidden');
+    });
+  });
+</script>

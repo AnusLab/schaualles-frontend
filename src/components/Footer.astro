@@ -1,0 +1,55 @@
+---
+import Logo from './Logo.astro';
+const year = new Date().getFullYear();
+---
+
+<footer class="bg-slate-900 text-white border-t border-slate-800">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div class="col-span-1 md:col-span-1">
+        <a href="/" class="block mb-6">
+          <Logo class="text-white" light={true} />
+        </a>
+        <p class="text-slate-400 text-sm">
+          Genießen Sie Entertainment ohne Grenzen. Ihr Premium IPTV Anbieter für beste Qualität und Stabilität.
+        </p>
+      </div>
+
+      <div>
+        <h3 class="text-lg font-semibold mb-4 text-brand-100">Produkt</h3>
+        <ul class="space-y-2">
+          <li><a href="/#features" class="text-slate-400 hover:text-white transition-colors">Funktionen</a></li>
+          <li><a href="/#pricing" class="text-slate-400 hover:text-white transition-colors">Preise</a></li>
+          <li><a href="/reseller" class="text-slate-400 hover:text-white transition-colors">Reseller werden</a></li>
+          <li><a href="/#setup" class="text-slate-400 hover:text-white transition-colors">Einrichtung</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="text-lg font-semibold mb-4 text-brand-100">Rechtliches</h3>
+        <ul class="space-y-2">
+          <li><a href="/impressum" class="text-slate-400 hover:text-white transition-colors">Impressum</a></li>
+          <li><a href="/datenschutz" class="text-slate-400 hover:text-white transition-colors">Datenschutz</a></li>
+          <li><a href="/agb" class="text-slate-400 hover:text-white transition-colors">AGB</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="text-lg font-semibold mb-4 text-brand-100">Kontakt</h3>
+        <ul class="space-y-2">
+          <li class="text-slate-400">support@schaualles.com</li>
+          <li class="text-slate-400">Live Chat (täglich 09:00 - 22:00)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="border-t border-slate-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+      <p class="text-slate-500 text-sm">
+        &copy; {year} SchauAlles.com. Alle Rechte vorbehalten.
+      </p>
+      <div class="flex space-x-6 mt-4 md:mt-0">
+        <!-- Social Icons Placeholder -->
+      </div>
+    </div>
+  </div>
+</footer>

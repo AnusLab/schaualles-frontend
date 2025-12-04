@@ -1,0 +1,96 @@
+---
+import { Image } from 'astro:assets';
+import { Trophy, Tv, Zap, PlayCircle, Medal, Activity } from 'lucide-react';
+
+// Import images
+import bundesligaImg from '../assets/banners/0ec3ed9ce_sports-bundesliga.jpg';
+import championsLeagueImg from '../assets/banners/3e2c0ddac_sports-champions-league.jpg';
+import premierLeagueImg from '../assets/banners/15d48d972_sports-premier-league.jpg';
+import f1Img from '../assets/banners/0c5a7f50e_sports-formula1-v2.png';
+import nbaImg from '../assets/banners/06bc7dfc8_sports-nba.jpg';
+import ufcImg from '../assets/banners/0ceb8ad9c_sports-ufc-v2.png';
+
+const leagues = [
+  { name: 'Bundesliga', image: bundesligaImg },
+  { name: 'Champions League', image: championsLeagueImg },
+  { name: 'Premier League', image: premierLeagueImg },
+  { name: 'Formel 1', image: f1Img },
+  { name: 'NBA', image: nbaImg },
+  { name: 'UFC', image: ufcImg },
+];
+
+const features = [
+  {
+    icon: Tv,
+    title: "Live & On-Demand",
+    description: "Alle Spiele live oder zeitversetzt mit 7-Tage Catch-Up"
+  },
+  {
+    icon: Trophy,
+    title: "Alle Top-Ligen",
+    description: "Von Bundesliga bis NBA - alle großen Sport-Events"
+  },
+  {
+    icon: Zap,
+    title: "HD & 4K Qualität",
+    description: "Kristallklare Bildqualität für das beste Sport-Erlebnis"
+  }
+];
+---
+
+<section class="py-24 bg-white relative overflow-hidden">
+  <!-- Background decorative elements -->
+  <div class="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+    <div class="absolute top-[-5%] left-[-5%] w-[400px] h-[400px] bg-slate-50 rounded-full mix-blend-multiply filter blur-3xl"></div>
+    <div class="absolute bottom-[-5%] right-[-5%] w-[400px] h-[400px] bg-blue-50 rounded-full mix-blend-multiply filter blur-3xl"></div>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <!-- Header -->
+    <div class="text-center mb-16 max-w-3xl mx-auto">
+      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 border border-blue-100 text-brand-600 text-sm font-bold mb-6">
+        <Trophy className="w-4 h-4" />
+        Live Sport-Events
+      </div>
+      
+      <h2 class="text-4xl md:text-5xl font-bold text-slate-900 mb-6">
+        Alle großen <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-brand-400">Sport-Events Live</span>
+      </h2>
+      
+      <p class="text-xl text-slate-600 leading-relaxed">
+        Verpassen Sie kein Spiel mehr - Bundesliga, Champions League, Premier League, NBA, UFC und Formel 1 in brillanter HD-Qualität.
+      </p>
+    </div>
+
+    <!-- Leagues Grid -->
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 mb-16">
+      {leagues.map((league) => (
+        <div class="group bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex items-center justify-center hover:shadow-xl hover:border-brand-100 hover:-translate-y-1 transition-all duration-300 h-32 md:h-40 relative overflow-hidden">
+          <div class="absolute inset-0 bg-gradient-to-br from-slate-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          <Image 
+            src={league.image} 
+            alt={league.name}
+            class="w-auto h-16 md:h-20 object-contain relative z-10 filter grayscale group-hover:grayscale-0 transition-all duration-300 transform group-hover:scale-110"
+          />
+        </div>
+      ))}
+    </div>
+
+    <!-- Features Box -->
+    <div class="bg-blue-50/50 rounded-3xl p-8 md:p-12 border border-blue-100">
+      <div class="grid md:grid-cols-3 gap-8 md:gap-12">
+        {features.map((feature) => (
+          <div class="text-center group">
+            <div class="w-16 h-16 bg-brand-600 rounded-2xl flex items-center justify-center text-white mx-auto mb-6 shadow-lg shadow-brand-500/20 group-hover:scale-110 transition-transform duration-300">
+              <feature.icon className="w-8 h-8" />
+            </div>
+            <h3 class="text-xl font-bold text-slate-900 mb-3">{feature.title}</h3>
+            <p class="text-slate-600 leading-relaxed">
+              {feature.description}
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>

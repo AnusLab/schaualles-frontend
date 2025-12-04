@@ -1,0 +1,88 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { query } from '../../lib/db';
+import { Calendar, Clock, ChevronRight } from 'lucide-react';
+
+let posts = [];
+try {
+  posts = await query('SELECT id, title, slug, excerpt, featured_image, created_at FROM blog_posts WHERE status = "published" ORDER BY created_at DESC');
+} catch (error) {
+  console.error('Error fetching posts:', error);
+}
+
+// Format date helper
+const formatDate = (dateStr) => {
+  return new Date(dateStr).toLocaleDateString('de-DE', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+};
+
+import { getSeo } from '../../lib/seo';
+
+const seo = await getSeo('blog') || {};
+const pageTitle = seo.title || "Blog & News | SchauAlles.com";
+const pageDescription = seo.description || "Aktuelle Neuigkeiten, Tutorials und Updates rund um IPTV, Technik und Streaming.";
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <div class="bg-slate-50 min-h-screen pt-32 pb-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center mb-16">
+        <h1 class="text-4xl md:text-5xl font-bold text-slate-900 mb-6">Unser Blog</h1>
+        <p class="text-xl text-slate-600 max-w-2xl mx-auto">
+          Tipps, Tricks und Neuigkeiten aus der Welt des Streamings.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {posts.map((post) => (
+          <article class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col h-full group">
+            {post.featured_image && (
+              <div class="h-48 overflow-hidden relative">
+                 <img 
+                  src={post.featured_image} 
+                  alt={post.title} 
+                  class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+              </div>
+            )}
+            
+            <div class="p-8 flex-1 flex flex-col">
+              <div class="flex items-center gap-4 text-sm text-slate-500 mb-4">
+                <span class="flex items-center gap-1.5">
+                  <Calendar className="w-4 h-4" />
+                  {formatDate(post.created_at)}
+                </span>
+              </div>
+
+              <h2 class="text-2xl font-bold text-slate-900 mb-3 group-hover:text-brand-600 transition-colors">
+                <a href={`/blog/${post.slug}`}>
+                  {post.title}
+                </a>
+              </h2>
+
+              <p class="text-slate-600 mb-6 line-clamp-3 flex-1">
+                {post.excerpt}
+              </p>
+
+              <a href={`/blog/${post.slug}`} class="inline-flex items-center text-brand-600 font-bold hover:text-brand-700 transition-colors mt-auto">
+                Artikel lesen
+                <ChevronRight className="w-4 h-4 ml-1" />
+              </a>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      {posts.length === 0 && (
+        <div class="text-center py-20 bg-white rounded-3xl border border-slate-200">
+          <p class="text-slate-500 text-lg">Aktuell sind keine Beiträge vorhanden.</p>
+        </div>
+      )}
+
+    </div>
+  </div>
+</Layout>

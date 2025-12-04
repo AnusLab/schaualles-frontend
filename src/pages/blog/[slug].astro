@@ -1,0 +1,95 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { query } from '../../lib/db';
+import { Calendar, Clock, ChevronLeft } from 'lucide-react';
+
+export async function getStaticPaths() {
+  try {
+    const posts = await query('SELECT * FROM blog_posts WHERE status = "published"');
+    return posts.map((post) => ({
+      params: { slug: post.slug },
+      props: { post },
+    }));
+  } catch (error) {
+    console.error('Error fetching posts for static paths:', error);
+    return [];
+  }
+}
+
+const { post } = Astro.props;
+
+// Format date helper
+const formatDate = (dateStr) => {
+  return new Date(dateStr).toLocaleDateString('de-DE', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+};
+
+// JSON-LD Schema
+const articleSchema = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": post.title,
+  "image": post.featured_image || "https://schaualles.com/social-share.jpg",
+  "datePublished": post.published_at || post.created_at,
+  "dateModified": post.updated_at,
+  "author": [{
+      "@type": "Organization",
+      "name": "SchauAlles IPTV",
+      "url": "https://schaualles.com"
+  }]
+};
+---
+
+<Layout 
+  title={`${post.meta_title || post.title} | SchauAlles.com`} 
+  description={post.meta_description || post.excerpt}
+>
+  <article class="bg-white min-h-screen pt-32 pb-24">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <a href="/blog" class="inline-flex items-center text-slate-500 hover:text-brand-600 transition-colors mb-8 group">
+        <ChevronLeft className="w-5 h-5 mr-1 transform group-hover:-translate-x-1 transition-transform" />
+        Zurück zur Übersicht
+      </a>
+
+      <header class="mb-12 text-center">
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 mb-6 leading-tight">
+          {post.title}
+        </h1>
+        
+        <div class="flex items-center justify-center gap-6 text-slate-500">
+          <span class="flex items-center gap-2">
+            <Calendar className="w-5 h-5" />
+            {formatDate(post.created_at)}
+          </span>
+          {post.author && (
+            <span class="font-medium text-slate-900">
+              Von {post.author}
+            </span>
+          )}
+        </div>
+      </header>
+
+      {post.featured_image && (
+        <div class="rounded-3xl overflow-hidden shadow-xl mb-12">
+          <img 
+            src={post.featured_image} 
+            alt={post.title}
+            class="w-full h-auto"
+          />
+        </div>
+      )}
+
+      <div class="prose prose-lg prose-slate max-w-none mx-auto">
+        <div set:html={post.content} />
+      </div>
+
+    </div>
+  </article>
+
+  <!-- Schema Markup -->
+  <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
+</Layout>

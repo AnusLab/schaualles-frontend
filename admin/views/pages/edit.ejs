@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEO Bearbeiten | Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>body { font-family: 'Inter', sans-serif; }</style>
+</head>
+<body class="bg-slate-50">
+    <div class="min-h-screen flex">
+        <!-- Sidebar -->
+        <aside class="bg-white border-r border-slate-200 w-64 flex-shrink-0 fixed h-full z-20">
+            <div class="p-6 border-b border-slate-100">
+                <h1 class="text-xl font-bold text-slate-900">SchauAlles</h1>
+            </div>
+            <nav class="p-4 space-y-1">
+                <a href="/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 hover:text-slate-900 font-medium transition-colors">Dashboard</a>
+                <a href="/blog" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 hover:text-slate-900 font-medium transition-colors">Blog Beiträge</a>
+                <a href="/guides" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 hover:text-slate-900 font-medium transition-colors">Hilfe Guides</a>
+                <a href="/pages" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-blue-50 text-blue-700 font-medium transition-colors">Seiten SEO</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="flex-1 ml-64 p-8 lg:p-12">
+            <header class="mb-10 flex justify-between items-center">
+                <div>
+                    <h2 class="text-3xl font-bold text-slate-900">SEO Bearbeiten</h2>
+                    <p class="text-slate-500 mt-2">Bearbeiten Sie die Metadaten für: <span class="font-mono bg-slate-100 px-2 py-1 rounded"><%= page.route %></span></p>
+                </div>
+                <a href="/pages" class="text-slate-500 hover:text-slate-900 font-medium">Zurück zur Übersicht</a>
+            </header>
+
+            <form action="/pages/save" method="POST" class="max-w-3xl bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+                <input type="hidden" name="id" value="<%= page.id %>">
+                
+                <div class="space-y-6">
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="block text-sm font-medium text-slate-700">Seitentitel (Meta Title)</label>
+                            <span class="text-xs text-slate-400" id="metaTitleCount">0 / 60 Zeichen</span>
+                        </div>
+                        <input type="text" name="title" id="metaTitleInput" value="<%= page.title %>" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all" required>
+                        <p class="text-xs text-slate-400 mt-1">Empfohlen: 50-60 Zeichen</p>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="block text-sm font-medium text-slate-700">Beschreibung (Meta Description)</label>
+                            <span class="text-xs text-slate-400" id="metaDescCount">0 / 160 Zeichen</span>
+                        </div>
+                        <textarea name="description" id="metaDescInput" rows="3" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all"><%= page.description %></textarea>
+                        <p class="text-xs text-slate-400 mt-1">Empfohlen: 150-160 Zeichen</p>
+                    </div>
+
+                    <div class="pt-6 border-t border-slate-100 flex justify-end gap-4">
+                        <a href="/pages" class="px-6 py-3 rounded-xl text-slate-600 hover:bg-slate-50 font-medium transition-colors">Abbrechen</a>
+                        <button type="submit" class="px-6 py-3 rounded-xl bg-blue-600 text-white font-bold hover:bg-blue-700 shadow-lg shadow-blue-500/20 transition-all">Speichern</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // SEO Character Counts
+        const metaTitleInput = document.getElementById('metaTitleInput');
+        const metaTitleCount = document.getElementById('metaTitleCount');
+        const metaDescInput = document.getElementById('metaDescInput');
+        const metaDescCount = document.getElementById('metaDescCount');
+
+        function updateCount(input, display, recommended) {
+            const length = input.value.length;
+            display.textContent = `${length} / ${recommended} Zeichen`;
+            
+            if (length > recommended) {
+                display.classList.add('text-red-500');
+                display.classList.remove('text-green-600', 'text-slate-400');
+            } else if (length > 0) {
+                display.classList.add('text-green-600');
+                display.classList.remove('text-red-500', 'text-slate-400');
+            } else {
+                display.classList.add('text-slate-400');
+                display.classList.remove('text-green-600', 'text-red-500');
+            }
+        }
+
+        metaTitleInput.addEventListener('input', () => updateCount(metaTitleInput, metaTitleCount, 60));
+        metaDescInput.addEventListener('input', () => updateCount(metaDescInput, metaDescCount, 160));
+        
+        // Initial update
+        updateCount(metaTitleInput, metaTitleCount, 60);
+        updateCount(metaDescInput, metaDescCount, 160);
+    </script>
+</body>
+</html>

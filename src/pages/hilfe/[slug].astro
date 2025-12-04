@@ -1,0 +1,296 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { query } from '../../lib/db';
+import { BookOpen, ChevronLeft, Play, Clock, CheckCircle2, AlertCircle, Info, MessageCircle, ThumbsUp, Share2, Printer, ArrowUp } from 'lucide-react';
+
+export async function getStaticPaths() {
+  try {
+    const guides = await query('SELECT * FROM help_guides');
+    return guides.map((guide) => ({
+      params: { slug: guide.slug },
+      props: { guide },
+    }));
+  } catch (error) {
+    console.error('Error fetching guides for static paths:', error);
+    return [];
+  }
+}
+
+const { guide } = Astro.props;
+
+// Helper to get embed URL
+function getEmbedUrl(url) {
+  if (!url) return null;
+  const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|shorts\/))([\w-]{11})/);
+  return match ? `https://www.youtube.com/embed/${match[1]}` : null;
+}
+
+const embedUrl = getEmbedUrl(guide.video_url);
+
+// Get related guides (same difficulty level)
+let relatedGuides = [];
+try {
+  relatedGuides = await query(
+    'SELECT id, title, slug, difficulty FROM help_guides WHERE difficulty = ? AND slug != ? LIMIT 3',
+    [guide.difficulty, guide.slug]
+  );
+} catch (error) {
+  console.error('Error fetching related guides:', error);
+}
+
+// JSON-LD Schema for HowTo
+const guideSchema = {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": guide.title,
+  "description": guide.meta_description || `Anleitung: ${guide.title}`,
+  "step": [
+    {
+      "@type": "HowToStep",
+      "text": "Bitte lesen Sie die vollständige Anleitung unten."
+    }
+  ]
+};
+---
+
+<Layout 
+  title={`${guide.meta_title || guide.title} | Hilfe Center`} 
+  description={guide.meta_description || `Schritt-für-Schritt Anleitung: ${guide.title}`}
+>
+  <div class="bg-gradient-to-br from-slate-50 via-white to-slate-50 min-h-screen">
+    
+    <!-- Progress Bar -->
+    <div id="progress-bar" class="fixed top-0 left-0 h-1 bg-gradient-to-r from-brand-500 to-blue-500 z-50 transition-all duration-300" style="width: 0%"></div>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="fixed bottom-8 right-8 w-12 h-12 bg-brand-600 text-white rounded-full shadow-lg hover:bg-brand-700 transition-all opacity-0 pointer-events-none z-40 flex items-center justify-center">
+      <ArrowUp className="w-6 h-6" />
+    </button>
+
+    <article class="pt-24 pb-24">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Breadcrumb -->
+        <nav class="mb-8">
+          <a href="/hilfe" class="inline-flex items-center text-slate-600 hover:text-brand-600 transition-colors group font-medium">
+            <ChevronLeft className="w-5 h-5 mr-1 transform group-hover:-translate-x-1 transition-transform" />
+            Zurück zum Hilfe Center
+          </a>
+        </nav>
+
+        <div class="grid lg:grid-cols-12 gap-8">
+          
+          <!-- Main Content -->
+          <div class="lg:col-span-8">
+            
+            <!-- Article Header -->
+            <header class="bg-white rounded-3xl p-8 md:p-10 shadow-sm border border-slate-200 mb-8">
+              <div class="flex flex-wrap items-center gap-3 mb-6">
+                <span class={`px-4 py-2 rounded-full text-sm font-bold uppercase tracking-wide ${
+                  guide.difficulty === 'easy' ? 'bg-green-100 text-green-700' : 
+                  guide.difficulty === 'medium' ? 'bg-yellow-100 text-yellow-700' : 
+                  'bg-red-100 text-red-700'
+                }`}>
+                  {guide.difficulty === 'easy' ? 'Einfach' : guide.difficulty === 'medium' ? 'Mittel' : 'Fortgeschritten'}
+                </span>
+                <div class="flex items-center text-slate-500 text-sm">
+                  <Clock className="w-4 h-4 mr-1" />
+                  <span>5-10 Min Lesezeit</span>
+                </div>
+              </div>
+              
+              <h1 class="text-3xl md:text-5xl font-extrabold text-slate-900 mb-6 leading-tight tracking-tight">
+                {guide.title}
+              </h1>
+
+              <!-- Action Buttons -->
+              <div class="flex flex-wrap gap-3">
+                <button class="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-medium transition-colors">
+                  <Share2 className="w-4 h-4" />
+                  Teilen
+                </button>
+                <button onclick="window.print()" class="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-medium transition-colors">
+                  <Printer className="w-4 h-4" />
+                  Drucken
+                </button>
+              </div>
+            </header>
+
+            <!-- Video Section -->
+            {embedUrl && (
+              <div class="mb-8 bg-white rounded-3xl p-6 shadow-sm border border-slate-200">
+                <div class="flex items-center gap-3 mb-4">
+                  <div class="w-10 h-10 bg-red-100 rounded-xl flex items-center justify-center">
+                    <Play className="w-5 h-5 text-red-600" />
+                  </div>
+                  <div>
+                    <h2 class="text-xl font-bold text-slate-900">Video-Tutorial</h2>
+                    <p class="text-sm text-slate-600">Folgen Sie der visuellen Anleitung</p>
+                  </div>
+                </div>
+                <div class="bg-slate-900 rounded-2xl overflow-hidden aspect-video shadow-lg">
+                  <iframe 
+                    src={embedUrl} 
+                    title={guide.title}
+                    class="w-full h-full"
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowfullscreen
+                  ></iframe>
+                </div>
+              </div>
+            )}
+
+            <!-- Content -->
+            <div class="bg-white rounded-3xl p-8 md:p-10 shadow-sm border border-slate-200 mb-8">
+              <div class="prose prose-lg prose-slate max-w-none prose-headings:font-bold prose-headings:tracking-tight prose-headings:text-slate-900 prose-p:text-slate-600 prose-p:leading-relaxed prose-a:text-brand-600 prose-a:font-medium prose-a:no-underline hover:prose-a:underline prose-strong:text-slate-900 prose-strong:font-bold prose-ul:text-slate-600 prose-ol:text-slate-600 prose-li:marker:text-brand-500 prose-img:rounded-2xl prose-img:shadow-lg prose-iframe:w-full prose-iframe:aspect-video prose-iframe:rounded-2xl prose-iframe:shadow-lg prose-code:text-brand-600 prose-code:bg-brand-50 prose-code:px-2 prose-code:py-1 prose-code:rounded prose-code:font-mono prose-code:text-sm prose-code:before:content-none prose-code:after:content-none prose-pre:bg-slate-900 prose-pre:text-slate-100 prose-blockquote:border-l-brand-500 prose-blockquote:bg-brand-50 prose-blockquote:py-4 prose-blockquote:px-6 prose-blockquote:rounded-r-xl">
+                <div set:html={guide.content} />
+              </div>
+            </div>
+
+            <!-- Helpful Section -->
+            <div class="bg-gradient-to-br from-brand-50 to-blue-50 rounded-3xl p-8 border border-brand-100">
+              <div class="text-center">
+                <h3 class="text-2xl font-bold text-slate-900 mb-4">War dieser Artikel hilfreich?</h3>
+                <div class="flex gap-4 justify-center mb-6">
+                  <button class="inline-flex items-center gap-2 px-6 py-3 bg-white hover:bg-green-50 text-slate-700 hover:text-green-700 rounded-xl font-bold transition-all shadow-sm border border-slate-200 hover:border-green-200">
+                    <ThumbsUp className="w-5 h-5" />
+                    Ja, sehr hilfreich
+                  </button>
+                  <button class="inline-flex items-center gap-2 px-6 py-3 bg-white hover:bg-slate-100 text-slate-700 rounded-xl font-bold transition-all shadow-sm border border-slate-200">
+                    Nein, nicht wirklich
+                  </button>
+                </div>
+                <a href="/kontakt" class="inline-flex items-center gap-2 text-brand-600 hover:text-brand-700 font-bold">
+                  <MessageCircle className="w-5 h-5" />
+                  Weitere Hilfe benötigt? Kontaktieren Sie uns
+                </a>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Sidebar -->
+          <aside class="lg:col-span-4">
+            <div class="sticky top-24 space-y-6">
+              
+              <!-- Quick Info Card -->
+              <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+                <h3 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                  <Info className="w-5 h-5 text-brand-600" />
+                  Schnellinfo
+                </h3>
+                <div class="space-y-3">
+                  <div class="flex items-start gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p class="font-medium text-slate-900 text-sm">Schwierigkeit</p>
+                      <p class="text-slate-600 text-sm">
+                        {guide.difficulty === 'easy' ? 'Einfach - Für Anfänger' : guide.difficulty === 'medium' ? 'Mittel - Grundkenntnisse' : 'Fortgeschritten - Erfahrung nötig'}
+                      </p>
+                    </div>
+                  </div>
+                  <div class="flex items-start gap-3">
+                    <Clock className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p class="font-medium text-slate-900 text-sm">Dauer</p>
+                      <p class="text-slate-600 text-sm">Ca. 5-10 Minuten</p>
+                    </div>
+                  </div>
+                  <div class="flex items-start gap-3">
+                    <AlertCircle className="w-5 h-5 text-orange-600 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p class="font-medium text-slate-900 text-sm">Voraussetzungen</p>
+                      <p class="text-slate-600 text-sm">Aktives IPTV-Abo</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Need Help Card -->
+              <div class="bg-gradient-to-br from-brand-600 to-brand-700 rounded-2xl p-6 text-white shadow-lg">
+                <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mb-4">
+                  <MessageCircle className="w-6 h-6" />
+                </div>
+                <h3 class="text-xl font-bold mb-2">Brauchen Sie Hilfe?</h3>
+                <p class="text-white/90 mb-4 text-sm">
+                  Unser Support-Team hilft Ihnen gerne weiter.
+                </p>
+                <a href="/kontakt" class="inline-flex items-center justify-center w-full gap-2 px-4 py-3 bg-white text-brand-600 rounded-xl font-bold hover:bg-slate-50 transition-all">
+                  Support kontaktieren
+                  <ChevronLeft className="w-4 h-4 rotate-180" />
+                </a>
+              </div>
+
+              <!-- Related Articles -->
+              {relatedGuides.length > 0 && (
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+                  <h3 class="text-lg font-bold text-slate-900 mb-4">Ähnliche Anleitungen</h3>
+                  <div class="space-y-3">
+                    {relatedGuides.map((related) => (
+                      <a href={`/hilfe/${related.slug}`} class="block p-3 rounded-xl hover:bg-slate-50 transition-colors group">
+                        <h4 class="font-bold text-slate-900 text-sm mb-1 group-hover:text-brand-600 transition-colors">
+                          {related.title}
+                        </h4>
+                        <span class={`text-xs font-medium ${
+                          related.difficulty === 'easy' ? 'text-green-600' : 
+                          related.difficulty === 'medium' ? 'text-yellow-600' : 
+                          'text-red-600'
+                        }`}>
+                          {related.difficulty === 'easy' ? 'Einfach' : related.difficulty === 'medium' ? 'Mittel' : 'Fortgeschritten'}
+                        </span>
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+            </div>
+          </aside>
+
+        </div>
+      </div>
+    </article>
+  </div>
+
+  <!-- Schema Markup -->
+  <script type="application/ld+json" set:html={JSON.stringify(guideSchema)} />
+</Layout>
+
+<script>
+  // Progress bar
+  const progressBar = document.getElementById('progress-bar');
+  const backToTop = document.getElementById('back-to-top');
+  
+  function updateProgress() {
+    const windowHeight = window.innerHeight;
+    const documentHeight = document.documentElement.scrollHeight - windowHeight;
+    const scrolled = window.scrollY;
+    const progress = (scrolled / documentHeight) * 100;
+    
+    if (progressBar) {
+      progressBar.style.width = `${progress}%`;
+    }
+    
+    // Show/hide back to top button
+    if (backToTop) {
+      if (scrolled > 300) {
+        backToTop.classList.remove('opacity-0', 'pointer-events-none');
+        backToTop.classList.add('opacity-100');
+      } else {
+        backToTop.classList.add('opacity-0', 'pointer-events-none');
+        backToTop.classList.remove('opacity-100');
+      }
+    }
+  }
+  
+  window.addEventListener('scroll', updateProgress);
+  updateProgress();
+  
+  // Back to top functionality
+  if (backToTop) {
+    backToTop.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+</script>

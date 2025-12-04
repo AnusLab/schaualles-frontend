@@ -1,0 +1,205 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { query } from '../../lib/db';
+import { BookOpen, PlayCircle, ChevronRight, Search, Tv, Smartphone, Tablet, Monitor, Clock, Star, HelpCircle, MessageCircle } from 'lucide-react';
+
+let guides = [];
+try {
+  guides = await query('SELECT id, title, slug, difficulty FROM help_guides ORDER BY created_at DESC');
+} catch (error) {
+  console.error('Error fetching guides:', error);
+}
+
+import { getSeo } from '../../lib/seo';
+
+const seo = await getSeo('help') || {};
+const pageTitle = seo.title || "Hilfe Center & Anleitungen | SchauAlles.com";
+const pageDescription = seo.description || "Schritt-für-Schritt Anleitungen, Video-Tutorials und Hilfe zur Einrichtung von IPTV auf allen Geräten.";
+
+// Quick help categories
+const quickHelp = [
+  { icon: Tv, title: "Smart TV", description: "Einrichtung auf Smart TVs", color: "blue" },
+  { icon: Smartphone, title: "Smartphone", description: "iOS & Android Apps", color: "green" },
+  { icon: Tablet, title: "Tablet", description: "Tablet Einrichtung", color: "purple" },
+  { icon: Monitor, title: "PC & Laptop", description: "Desktop Anwendungen", color: "orange" }
+];
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <div class="bg-gradient-to-br from-slate-50 via-white to-slate-50 min-h-screen">
+    
+    <!-- Hero Section -->
+    <section class="pt-32 pb-16 bg-gradient-to-br from-brand-600 to-brand-700 relative overflow-hidden">
+      <div class="absolute inset-0 opacity-10">
+        <div class="absolute top-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
+        <div class="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
+      </div>
+      
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="text-center mb-12">
+          <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 text-white text-sm font-bold mb-6">
+            <HelpCircle className="w-4 h-4" />
+            Hilfe Center
+          </div>
+          <h1 class="text-4xl md:text-6xl font-extrabold text-white mb-6 tracking-tight">
+            Wie können wir<br/>Ihnen helfen?
+          </h1>
+          <p class="text-xl text-white/90 max-w-2xl mx-auto mb-10">
+            Durchsuchen Sie unsere Anleitungen oder wählen Sie Ihr Gerät für eine schnelle Einrichtung.
+          </p>
+          
+          <!-- Search Bar -->
+          <div class="max-w-2xl mx-auto">
+            <div class="relative">
+              <Search className="absolute left-6 top-1/2 transform -translate-y-1/2 w-6 h-6 text-slate-400" />
+              <input 
+                type="text" 
+                id="search-input"
+                placeholder="Suchen Sie nach Anleitungen, Geräten oder Themen..." 
+                class="w-full pl-16 pr-6 py-5 rounded-2xl border-2 border-white/20 bg-white/95 backdrop-blur-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-white/30 focus:border-white text-lg shadow-xl"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Help Categories -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
+          {quickHelp.map((item) => (
+            <button class="bg-white/10 backdrop-blur-sm hover:bg-white/20 border border-white/20 rounded-2xl p-6 text-center transition-all duration-300 hover:scale-105 group">
+              <div class={`w-14 h-14 mx-auto mb-3 rounded-xl bg-white/20 flex items-center justify-center group-hover:bg-white/30 transition-colors`}>
+                <item.icon className="w-7 h-7 text-white" />
+              </div>
+              <h3 class="text-white font-bold text-base mb-1">{item.title}</h3>
+              <p class="text-white/70 text-sm">{item.description}</p>
+            </button>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="py-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Popular Guides Section -->
+        <div class="mb-16">
+          <div class="flex items-center gap-3 mb-8">
+            <div class="w-12 h-12 bg-brand-100 rounded-xl flex items-center justify-center">
+              <Star className="w-6 h-6 text-brand-600" />
+            </div>
+            <div>
+              <h2 class="text-3xl font-bold text-slate-900">Beliebte Anleitungen</h2>
+              <p class="text-slate-600">Die am häufigsten aufgerufenen Hilfe-Artikel</p>
+            </div>
+          </div>
+
+          <div id="guides-container" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {guides.map((guide) => (
+              <a href={`/hilfe/${guide.slug}`} data-title={guide.title.toLowerCase()} class="guide-card bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:shadow-xl hover:border-brand-300 hover:-translate-y-1 transition-all duration-300 group flex flex-col h-full">
+                <div class="flex items-start justify-between mb-4">
+                  <div class="w-12 h-12 bg-gradient-to-br from-brand-500 to-brand-600 rounded-xl flex items-center justify-center text-white group-hover:scale-110 transition-transform shadow-lg shadow-brand-500/30">
+                    <PlayCircle className="w-6 h-6" />
+                  </div>
+                  <span class={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide ${
+                    guide.difficulty === 'easy' ? 'bg-green-100 text-green-700' : 
+                    guide.difficulty === 'medium' ? 'bg-yellow-100 text-yellow-700' : 
+                    'bg-red-100 text-red-700'
+                  }`}>
+                    {guide.difficulty === 'easy' ? 'Einfach' : guide.difficulty === 'medium' ? 'Mittel' : 'Fortgeschritten'}
+                  </span>
+                </div>
+
+                <h3 class="text-xl font-bold text-slate-900 mb-3 group-hover:text-brand-600 transition-colors leading-tight">
+                  {guide.title}
+                </h3>
+                
+                <div class="mt-auto pt-4 flex items-center justify-between">
+                  <div class="flex items-center text-slate-500 text-sm">
+                    <Clock className="w-4 h-4 mr-1" />
+                    <span>5-10 Min</span>
+                  </div>
+                  <div class="flex items-center text-brand-600 font-bold text-sm group-hover:translate-x-1 transition-transform">
+                    Anleitung öffnen
+                    <ChevronRight className="w-4 h-4 ml-1" />
+                  </div>
+                </div>
+              </a>
+            ))}
+          </div>
+
+          <div id="no-results" class="hidden text-center py-16 bg-slate-50 rounded-2xl border-2 border-dashed border-slate-300">
+            <div class="w-16 h-16 bg-slate-200 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Search className="w-8 h-8 text-slate-400" />
+            </div>
+            <h3 class="text-xl font-bold text-slate-900 mb-2">Keine Ergebnisse gefunden</h3>
+            <p class="text-slate-600">Versuchen Sie es mit anderen Suchbegriffen oder kontaktieren Sie unseren Support.</p>
+          </div>
+        </div>
+
+        {guides.length === 0 && (
+          <div class="text-center py-20 bg-white rounded-3xl border border-slate-200">
+            <p class="text-slate-500 text-lg">Aktuell sind keine Anleitungen vorhanden.</p>
+          </div>
+        )}
+
+        <!-- Need More Help Section -->
+        <div class="bg-gradient-to-br from-brand-50 to-blue-50 rounded-3xl p-8 md:p-12 border border-brand-100">
+          <div class="max-w-3xl mx-auto text-center">
+            <div class="w-16 h-16 bg-brand-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
+              <MessageCircle className="w-8 h-8 text-white" />
+            </div>
+            <h2 class="text-3xl font-bold text-slate-900 mb-4">Brauchen Sie weitere Hilfe?</h2>
+            <p class="text-lg text-slate-600 mb-8">
+              Unser Support-Team steht Ihnen 24/7 zur Verfügung und hilft Ihnen gerne weiter.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+              <a href="/kontakt" class="inline-flex items-center justify-center gap-2 px-8 py-4 bg-brand-600 text-white rounded-xl font-bold hover:bg-brand-700 transition-all shadow-lg shadow-brand-500/30 hover:scale-105">
+                <MessageCircle className="w-5 h-5" />
+                Support kontaktieren
+              </a>
+              <a href="/#pricing" class="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-brand-600 rounded-xl font-bold hover:bg-slate-50 transition-all border-2 border-brand-200">
+                Zurück zur Startseite
+                <ChevronRight className="w-5 h-5" />
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </div>
+</Layout>
+
+<script>
+  // Search functionality
+  const searchInput = document.getElementById('search-input');
+  const guidesContainer = document.getElementById('guides-container');
+  const noResults = document.getElementById('no-results');
+  
+  if (searchInput && guidesContainer && noResults) {
+    searchInput.addEventListener('input', (e) => {
+      const searchTerm = e.target.value.toLowerCase().trim();
+      const guideCards = guidesContainer.querySelectorAll('.guide-card');
+      let visibleCount = 0;
+      
+      guideCards.forEach((card) => {
+        const title = card.getAttribute('data-title') || '';
+        if (title.includes(searchTerm)) {
+          card.classList.remove('hidden');
+          visibleCount++;
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+      
+      // Show/hide no results message
+      if (visibleCount === 0 && searchTerm !== '') {
+        noResults.classList.remove('hidden');
+        guidesContainer.classList.add('hidden');
+      } else {
+        noResults.classList.add('hidden');
+        guidesContainer.classList.remove('hidden');
+      }
+    });
+  }
+</script>

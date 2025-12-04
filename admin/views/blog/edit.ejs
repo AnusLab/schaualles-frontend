@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= post ? 'Beitrag bearbeiten' : 'Neuer Beitrag' %> | Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-50">
+    <div class="min-h-screen flex">
+        <!-- Sidebar -->
+        <aside class="bg-white border-r border-slate-200 w-64 flex-shrink-0 fixed h-full z-20">
+            <div class="p-6 border-b border-slate-100">
+                <h1 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                    <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    </div>
+                    SchauAlles
+                </h1>
+            </div>
+            <nav class="p-4 space-y-1">
+                <a href="/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 hover:text-slate-900 font-medium transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                    Dashboard
+                </a>
+                <a href="/blog" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-blue-50 text-blue-700 font-medium transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path></svg>
+                    Blog Beiträge
+                </a>
+                <a href="/guides" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 hover:text-slate-900 font-medium transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                    Hilfe Guides
+                </a>
+                <a href="/pages" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 hover:text-slate-900 font-medium transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    Seiten SEO
+                </a>
+            </nav>
+            <div class="absolute bottom-0 w-full p-4 border-t border-slate-100">
+                <a href="/logout" class="flex items-center gap-3 px-4 py-3 rounded-xl text-red-600 hover:bg-red-50 font-medium transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                    Abmelden
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="flex-1 ml-64 p-8 lg:p-12">
+            <div class="max-w-5xl mx-auto">
+                <div class="flex items-center gap-4 mb-8">
+                    <a href="/blog" class="p-2 rounded-lg hover:bg-slate-200 transition-colors text-slate-500">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    </a>
+                    <h2 class="text-3xl font-bold text-slate-900"><%= post ? 'Beitrag bearbeiten' : 'Neuer Beitrag' %></h2>
+                </div>
+
+                <form action="/blog/save" method="POST" class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 space-y-8">
+                    <% if (post) { %>
+                        <input type="hidden" name="id" value="<%= post.id %>">
+                    <% } %>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1.5">Titel</label>
+                            <input type="text" name="title" value="<%= post ? post.title : '' %>" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all" required id="titleInput">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1.5">Slug (URL)</label>
+                            <input type="text" name="slug" value="<%= post ? post.slug : '' %>" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all font-mono text-sm" required id="slugInput">
+                        </div>
+                    </div>
+
+                    <!-- SEO Fields -->
+                    <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200/60">
+                        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-6 flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                                SEO Einstellungen
+                            </div>
+                            <button type="button" id="aiGenerateBtn" class="text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-2 text-xs normal-case font-semibold">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                                AI Vorschläge generieren
+                            </button>
+                        </h3>
+                        <div class="grid grid-cols-1 gap-6">
+                            <div>
+                                <div class="flex justify-between items-center mb-1.5">
+                                    <label class="block text-sm font-medium text-slate-700">Meta Title (Optional)</label>
+                                    <span class="text-xs text-slate-400" id="metaTitleCount">0 / 60 Zeichen</span>
+                                </div>
+                                <input type="text" name="meta_title" id="metaTitleInput" value="<%= post ? post.meta_title : '' %>" class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all" placeholder="Optimierter Titel für Suchmaschinen">
+                            </div>
+                            <div>
+                                <div class="flex justify-between items-center mb-1.5">
+                                    <label class="block text-sm font-medium text-slate-700">Meta Description (Optional)</label>
+                                    <span class="text-xs text-slate-400" id="metaDescCount">0 / 160 Zeichen</span>
+                                </div>
+                                <textarea name="meta_description" id="metaDescInput" rows="2" class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all resize-none" placeholder="Kurze Beschreibung für Google (max. 160 Zeichen)"><%= post ? post.meta_description : '' %></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1.5">Beitragsbild URL</label>
+                                <div class="flex gap-2">
+                                    <input type="text" name="featured_image" value="<%= post ? post.featured_image : '' %>" class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all" placeholder="https://...">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1.5">Status</label>
+                        <select name="status" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all cursor-pointer">
+                            <option value="draft" <%= (post && post.status === 'draft') ? 'selected' : '' %>>Entwurf</option>
+                            <option value="published" <%= (post && post.status === 'published') ? 'selected' : '' %>>Veröffentlicht</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1.5">Auszug (Excerpt)</label>
+                        <textarea name="excerpt" rows="3" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"><%= post ? post.excerpt : '' %></textarea>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between items-end mb-3">
+                            <label class="block text-sm font-medium text-slate-700">Inhalt</label>
+                            <div class="flex gap-2">
+                                <button type="button" id="aiEnhanceBtn" class="text-xs font-medium text-purple-600 hover:text-purple-800 bg-purple-50 hover:bg-purple-100 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-2">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                                    KI Optimierung
+                                </button>
+                                <button type="button" id="toggleSourceBtn" class="text-xs font-medium text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-2">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+                                    Quellcode umschalten
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Visual Editor Container -->
+                        <div id="visualEditorContainer" class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+                            <div id="editor" style="height: 500px;" class="bg-white"><%- post ? post.content : '' %></div>
+                        </div>
+
+                        <!-- Source Editor Container (Hidden by default) -->
+                        <div id="sourceEditorContainer" class="hidden">
+                            <textarea id="sourceEditor" class="w-full h-[500px] font-mono text-sm p-4 bg-slate-900 text-slate-200 border border-slate-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none resize-none leading-relaxed" placeholder="HTML Quellcode hier einfügen..."></textarea>
+                        </div>
+                        
+                        <input type="hidden" name="content" id="contentInput">
+                    </div>
+
+                    <div class="flex justify-end pt-6 border-t border-slate-100">
+                        <button type="submit" class="bg-blue-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-blue-700 shadow-lg shadow-blue-500/30 hover:shadow-blue-500/40 transition-all transform active:scale-95">
+                            Speichern
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Suggestions Modal -->
+    <div id="aiModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] flex flex-col transform scale-95 transition-transform duration-300" id="aiModalContent">
+            <div class="p-6 border-b border-slate-100 flex justify-between items-center">
+                <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                    <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    </div>
+                    AI SEO Vorschläge
+                </h3>
+                <div class="flex items-center gap-2">
+                    <button id="aiRerollBtn" class="text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-2 text-xs font-bold hidden">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                        Neu generieren
+                    </button>
+                    <button id="closeAiModal" class="text-slate-400 hover:text-slate-600 p-2 rounded-lg hover:bg-slate-50 transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="p-6 overflow-y-auto flex-1">
+                <div id="aiLoading" class="hidden flex flex-col items-center justify-center py-12">
+                    <div class="w-16 h-16 border-4 border-blue-100 border-t-blue-600 rounded-full animate-spin mb-4"></div>
+                    <p class="text-slate-600 font-medium">Analysiere Inhalte & generiere Vorschläge...</p>
+                    <p class="text-slate-400 text-sm mt-2">Dies kann einige Sekunden dauern</p>
+                </div>
+
+                <div id="aiResults" class="hidden space-y-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Post Titles -->
+                        <div>
+                            <h4 class="text-sm font-bold text-slate-900 uppercase tracking-wider mb-4 flex items-center gap-2">
+                                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                                Beitragstitel (H1)
+                            </h4>
+                            <div class="space-y-3" id="aiPostTitlesList"></div>
+                        </div>
+                        <!-- Slugs -->
+                        <div>
+                            <h4 class="text-sm font-bold text-slate-900 uppercase tracking-wider mb-4 flex items-center gap-2">
+                                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
+                                URL Slug
+                            </h4>
+                            <div class="space-y-3" id="aiSlugsList"></div>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-slate-100"></div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Meta Titles -->
+                        <div>
+                            <h4 class="text-sm font-bold text-slate-900 uppercase tracking-wider mb-4 flex items-center gap-2">
+                                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                                SEO Meta Title
+                            </h4>
+                            <div class="space-y-3" id="aiMetaTitlesList"></div>
+                        </div>
+                        <!-- Meta Descriptions -->
+                        <div>
+                            <h4 class="text-sm font-bold text-slate-900 uppercase tracking-wider mb-4 flex items-center gap-2">
+                                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>
+                                SEO Meta Description
+                            </h4>
+                            <div class="space-y-3" id="aiMetaDescriptionsList"></div>
+                        </div>
+                    </div>
+
+                    <div class="pt-6 flex justify-end border-t border-slate-100">
+                         <button id="closeAiModalBtn" class="bg-blue-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-blue-700 transition-all shadow-lg shadow-blue-500/20">Fertig</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <script>
+        // ... existing code ...
+
+        // AI Generation Logic
+        const aiGenerateBtn = document.getElementById('aiGenerateBtn');
+        const aiRerollBtn = document.getElementById('aiRerollBtn');
+        const aiModal = document.getElementById('aiModal');
+        const aiModalContent = document.getElementById('aiModalContent');
+        const closeAiModal = document.getElementById('closeAiModal');
+        const closeAiModalBtn = document.getElementById('closeAiModalBtn');
+        const aiLoading = document.getElementById('aiLoading');
+        const aiResults = document.getElementById('aiResults');
+        
+        const aiPostTitlesList = document.getElementById('aiPostTitlesList');
+        const aiSlugsList = document.getElementById('aiSlugsList');
+        const aiMetaTitlesList = document.getElementById('aiMetaTitlesList');
+        const aiMetaDescriptionsList = document.getElementById('aiMetaDescriptionsList');
+
+        // Inputs
+        const titleInput = document.getElementById('titleInput');
+        const slugInput = document.getElementById('slugInput');
+
+        function toggleModal(show) {
+            if (show) {
+                aiModal.classList.remove('hidden');
+                setTimeout(() => {
+                    aiModal.classList.remove('opacity-0');
+                    aiModalContent.classList.remove('scale-95');
+                    aiModalContent.classList.add('scale-100');
+                }, 10);
+            } else {
+                aiModal.classList.add('opacity-0');
+                aiModalContent.classList.remove('scale-100');
+                aiModalContent.classList.add('scale-95');
+                setTimeout(() => {
+                    aiModal.classList.add('hidden');
+                }, 300);
+            }
+        }
+
+        [closeAiModal, closeAiModalBtn].forEach(btn => {
+            btn.addEventListener('click', () => toggleModal(false));
+        });
+        
+        aiModal.addEventListener('click', (e) => {
+            if (e.target === aiModal) toggleModal(false);
+        });
+
+        async function generateAiContent() {
+            // Get content from editor
+            const content = isSourceMode ? sourceEditor.value : quill.root.innerText;
+            
+            if (content.trim().length < 50) {
+                alert('Bitte fügen Sie zuerst mehr Inhalt hinzu, damit die AI ihn analysieren kann.');
+                return;
+            }
+
+            toggleModal(true);
+            aiLoading.classList.remove('hidden');
+            aiResults.classList.add('hidden');
+            aiRerollBtn.classList.add('hidden');
+
+            try {
+                const response = await fetch('/api/generate-seo', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        content: content,
+                        type: 'blog'
+                    })
+                });
+
+                if (!response.ok) {
+                    const data = await response.json();
+                    throw new Error(data.error || 'Fehler bei der Generierung');
+                }
+
+                const data = await response.json();
+                displayAiResults(data);
+                aiRerollBtn.classList.remove('hidden');
+
+            } catch (error) {
+                alert('Fehler: ' + error.message);
+                toggleModal(false);
+            }
+        }
+
+        aiGenerateBtn.addEventListener('click', generateAiContent);
+        aiRerollBtn.addEventListener('click', generateAiContent);
+
+        function createOptionElement(text, targetInput, countDisplay = null, maxCount = null) {
+            const div = document.createElement('div');
+            div.className = 'p-4 border border-slate-200 rounded-xl hover:border-blue-500 hover:bg-blue-50 cursor-pointer transition-all group relative select-option';
+            
+            let countHtml = '';
+            if (countDisplay) {
+                countHtml = `
+                    <div class="mt-2 flex items-center gap-2 text-xs">
+                        <span class="${text.length > maxCount ? 'text-orange-500' : 'text-green-600'} font-medium">${text.length} Zeichen</span>
+                    </div>
+                `;
+            }
+
+            div.innerHTML = `
+                <div class="flex justify-between items-start gap-3">
+                    <p class="text-slate-700 font-medium text-sm leading-relaxed">${text}</p>
+                    <div class="opacity-0 group-hover:opacity-100 text-blue-600 transition-opacity check-icon">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    </div>
+                </div>
+                ${countHtml}
+            `;
+
+            div.onclick = () => {
+                // Update Input
+                targetInput.value = text;
+                
+                // Update Counter if exists
+                if (countDisplay && maxCount) {
+                    updateCount(targetInput, countDisplay, maxCount);
+                }
+
+                // Update Visual State of all siblings
+                const parent = div.parentElement;
+                Array.from(parent.children).forEach(child => {
+                    child.classList.remove('border-blue-500', 'bg-blue-50', 'ring-2', 'ring-blue-500/20');
+                    child.querySelector('.check-icon').classList.remove('opacity-100');
+                    child.querySelector('.check-icon').classList.add('opacity-0');
+                });
+
+                // Active State for clicked
+                div.classList.add('border-blue-500', 'bg-blue-50', 'ring-2', 'ring-blue-500/20');
+                div.querySelector('.check-icon').classList.remove('opacity-0');
+                div.querySelector('.check-icon').classList.add('opacity-100');
+
+                // Flash Input
+                targetInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                targetInput.classList.add('ring-2', 'ring-green-500', 'bg-green-50');
+                setTimeout(() => targetInput.classList.remove('ring-2', 'ring-green-500', 'bg-green-50'), 1000);
+            };
+
+            return div;
+        }
+
+        function displayAiResults(data) {
+            aiLoading.classList.add('hidden');
+            aiResults.classList.remove('hidden');
+            
+            aiPostTitlesList.innerHTML = '';
+            aiSlugsList.innerHTML = '';
+            aiMetaTitlesList.innerHTML = '';
+            aiMetaDescriptionsList.innerHTML = '';
+
+            // Post Titles
+            (data.post_titles || []).forEach(text => {
+                aiPostTitlesList.appendChild(createOptionElement(text, titleInput));
+            });
+
+            // Slugs
+            (data.slugs || []).forEach(text => {
+                aiSlugsList.appendChild(createOptionElement(text, slugInput));
+            });
+
+            // Meta Titles
+            (data.meta_titles || []).forEach(text => {
+                aiMetaTitlesList.appendChild(createOptionElement(text, metaTitleInput, metaTitleCount, 60));
+            });
+
+            // Meta Descriptions
+            (data.meta_descriptions || []).forEach(text => {
+                aiMetaDescriptionsList.appendChild(createOptionElement(text, metaDescInput, metaDescCount, 160));
+            });
+        }
+
+
+        // Initialize Quill Editor
+        var quill = new Quill('#editor', {
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    [{ 'header': [1, 2, 3, false] }],
+                    ['bold', 'italic', 'underline', 'strike'],
+                    ['blockquote', 'code-block'],
+                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                    [{ 'color': [] }, { 'background': [] }],
+                    ['link', 'image', 'video'],
+                    ['clean']
+                ]
+            }
+        });
+
+        const toggleSourceBtn = document.getElementById('toggleSourceBtn');
+        const visualEditorContainer = document.getElementById('visualEditorContainer');
+        const sourceEditorContainer = document.getElementById('sourceEditorContainer');
+        const sourceEditor = document.getElementById('sourceEditor');
+        let isSourceMode = false;
+
+        // Initialize source editor with content
+        sourceEditor.value = quill.root.innerHTML;
+
+        toggleSourceBtn.addEventListener('click', () => {
+            isSourceMode = !isSourceMode;
+            
+            if (isSourceMode) {
+                // Switch to Source Mode
+                sourceEditor.value = quill.root.innerHTML;
+                visualEditorContainer.classList.add('hidden');
+                sourceEditorContainer.classList.remove('hidden');
+                toggleSourceBtn.innerHTML = `
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                    Visueller Editor
+                `;
+                toggleSourceBtn.classList.remove('bg-blue-50', 'text-blue-600');
+                toggleSourceBtn.classList.add('bg-slate-200', 'text-slate-700');
+            } else {
+                // Switch to Visual Mode
+                quill.root.innerHTML = sourceEditor.value;
+                sourceEditorContainer.classList.add('hidden');
+                visualEditorContainer.classList.remove('hidden');
+                toggleSourceBtn.innerHTML = `
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+                    Quellcode umschalten
+                `;
+                toggleSourceBtn.classList.remove('bg-slate-200', 'text-slate-700');
+                toggleSourceBtn.classList.add('bg-blue-50', 'text-blue-600');
+            }
+        });
+
+        // Sync content before submit
+        document.querySelector('form').onsubmit = function() {
+            var content = document.querySelector('input[name=content]');
+            content.value = isSourceMode ? sourceEditor.value : quill.root.innerHTML;
+        };
+
+        // AI Content Enhancement
+        const aiEnhanceBtn = document.getElementById('aiEnhanceBtn');
+        const enhanceModal = document.getElementById('enhanceModal');
+        const enhanceModalContent = document.getElementById('enhanceModalContent');
+        const closeEnhanceModal = document.getElementById('closeEnhanceModal');
+        const rejectEnhanceBtn = document.getElementById('rejectEnhanceBtn');
+        const applyEnhanceBtn = document.getElementById('applyEnhanceBtn');
+        const enhancePreview = document.getElementById('enhancePreview');
+        
+        let pendingEnhancedContent = '';
+
+        function toggleEnhanceModal(show) {
+            if (show) {
+                enhanceModal.classList.remove('hidden');
+                setTimeout(() => {
+                    enhanceModal.classList.remove('opacity-0');
+                    enhanceModalContent.classList.remove('scale-95');
+                    enhanceModalContent.classList.add('scale-100');
+                }, 10);
+            } else {
+                enhanceModal.classList.add('opacity-0');
+                enhanceModalContent.classList.remove('scale-100');
+                enhanceModalContent.classList.add('scale-95');
+                setTimeout(() => {
+                    enhanceModal.classList.add('hidden');
+                }, 300);
+            }
+        }
+
+        [closeEnhanceModal, rejectEnhanceBtn].forEach(btn => {
+            btn.addEventListener('click', () => toggleEnhanceModal(false));
+        });
+
+        applyEnhanceBtn.addEventListener('click', () => {
+            if (isSourceMode) {
+                sourceEditor.value = pendingEnhancedContent;
+            } else {
+                quill.root.innerHTML = pendingEnhancedContent;
+            }
+            toggleEnhanceModal(false);
+        });
+
+        aiEnhanceBtn.addEventListener('click', async () => {
+            const content = isSourceMode ? sourceEditor.value : quill.root.innerText;
+            
+            if (content.trim().length < 50) {
+                alert('Bitte fügen Sie zuerst mehr Inhalt hinzu, damit die KI ihn optimieren kann.');
+                return;
+            }
+
+            const originalText = aiEnhanceBtn.innerHTML;
+            aiEnhanceBtn.innerHTML = `
+                <svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                Optimiere...
+            `;
+            aiEnhanceBtn.disabled = true;
+            aiEnhanceBtn.classList.add('opacity-70', 'cursor-not-allowed');
+
+            try {
+                const response = await fetch('/api/enhance-content', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        content: content,
+                        type: 'blog'
+                    })
+                });
+
+                let data;
+                const responseText = await response.text();
+                try {
+                    data = JSON.parse(responseText);
+                } catch (e) {
+                    console.error('JSON Parse Error:', e, 'Raw Response:', responseText);
+                    throw new Error('Server antwortete nicht mit gültigem JSON. ' + (responseText.length < 100 ? responseText : 'Siehe Konsole für Details.'));
+                }
+
+                if (!response.ok) {
+                    throw new Error(data.error || 'Fehler bei der Optimierung');
+                }
+
+                // Show Review Modal
+                pendingEnhancedContent = data.content;
+                enhancePreview.innerHTML = data.content;
+                toggleEnhanceModal(true);
+                
+                // Reset button state
+                aiEnhanceBtn.innerHTML = originalText;
+                aiEnhanceBtn.disabled = false;
+                aiEnhanceBtn.classList.remove('opacity-70', 'cursor-not-allowed');
+
+            } catch (error) {
+                alert('Fehler: ' + error.message);
+                aiEnhanceBtn.innerHTML = originalText;
+                aiEnhanceBtn.disabled = false;
+                aiEnhanceBtn.classList.remove('opacity-70', 'cursor-not-allowed');
+            }
+        });
+
+        // Auto-generate slug
+        document.getElementById('titleInput').addEventListener('input', function(e) {
+            const isEditing = "<%= post ? 'true' : 'false' %>" === "true";
+            if (!isEditing) { // Only on new posts
+                var slug = e.target.value.toLowerCase()
+                    .replace(/[^\w ]+/g, '')
+                    .replace(/ +/g, '-');
+                document.getElementById('slugInput').value = slug;
+            }
+        });
+    </script>
+</body>
+</html>

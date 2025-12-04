@@ -1,0 +1,158 @@
+---
+import { ChevronDown } from 'lucide-react';
+
+const faqs = [
+  {
+    question: "Welche Geräte sind kompatibel?",
+    answer: `Unser Service funktioniert auf vielen gängigen Endgeräten. Für die beste Nutzererfahrung empfehlen wir moderne <strong>Android-/Android-TV-Boxen</strong>.
+    <br/><br/>
+    • <strong>Android / Android TV:</strong> Gloriaforce, Formuler, MAG, Mi Box, Fire TV Stick, Fire TV Cube<br/>
+    • <strong>Enigma2:</strong> Dreambox, GigaBlue, VU+ (z. B. VU+ Zero) – nutzbar, jedoch mit eingeschränktem Komfort gegenüber Android-Geräten<br/>
+    • <strong>Weitere Geräte:</strong> Smart-TV (mit kompatibler App), Laptop/PC, Smartphone<br/>
+    • <strong>Nicht empfohlen:</strong> Roku
+    <br/><br/>
+    <strong>Hinweis:</strong> Für die schnellste Bedienung, höchste Stabilität und das beste App-Erlebnis empfehlen wir eine <strong>aktuelle Android-TV-Box</strong>.`
+  },
+  {
+    question: "Welches Gerät wird empfohlen?",
+    answer: `Wir empfehlen aktuell die <strong>Gloriaforce RTX DUO</strong> – unser neues Flaggschiff und offizielles Partnerprodukt. Qualität "<strong>Made in Germany</strong>" für ein erstklassiges IPTV-Erlebnis.
+    <br/><br/>
+    • <strong>Plug & Play:</strong> Auf Wunsch fix & fertig eingerichtet – auspacken, anschließen, losstreamen<br/>
+    • <strong>Optimierte IPTV-App:</strong> Ab Werk vorinstalliert und perfekt auf die Box abgestimmt<br/>
+    • <strong>Maximale Performance:</strong> Rasend schnelle Menüs, stabile Streams und hohe Zukunftssicherheit
+    <br/><br/>
+    <a href="https://login.6iptv.cc/store/streaming-box" target="_blank" class="text-brand-600 hover:text-brand-700 font-bold underline decoration-brand-300 underline-offset-2">Streaming Box jetzt bestellen</a>
+    <br/><br/>
+    <strong>Hinweis:</strong> Andere Geräte empfehlen wir derzeit nicht, da sie häufig Nachteile bei Leistung, Stabilität oder Bedienkomfort aufweisen.`
+  },
+  {
+    question: "Wie schnell muss meine Internetverbindung sein?",
+    answer: `<strong>Netzwerk-Empfehlung für Full-HD (1080p)</strong>
+    <br/><br/>
+    • <strong>Empfohlene Bandbreite:</strong> 16–32 Mbit/s pro Stream für ruckelfreie Wiedergabe<br/>
+    • <strong>Stabile Verbindung:</strong> Bevorzugt LAN (Ethernet) oder ein starkes 5-GHz-WLAN<br/>
+    • <strong>Parallelnutzung beachten:</strong> Bei mehreren Streams oder Downloads entsprechend mehr Bandbreite einplanen<br/>
+    • <strong>Tipp bei Problemen:</strong> Router neu starten, WLAN-Signal optimieren oder auf Kabel umstellen
+    <br/><br/>
+    Eine <strong>stabile Internetverbindung</strong> ist Voraussetzung für eine konstant hohe Qualität.`
+  },
+  {
+    question: "Welche Zahlungsarten stehen zur Verfügung?",
+    answer: `<strong>Verfügbare Zahlungsmethoden</strong>
+    <br/><br/>
+    • <strong>PayPal:</strong> Schnelle, bequeme Zahlung mit Käuferschutz<br/>
+    • <strong>Kredit-/Debitkarten:</strong> Mastercard & Visa<br/>
+    • <strong>Mobile Wallets:</strong> Apple Pay & Google Pay<br/>
+    • <strong>Paysafecard:</strong> Prepaid-Code (siehe Richtlinien)<br/>
+    • <strong>Amazon-Geschenkkarten:</strong> Nur zugelassene Kaufquellen (siehe Richtlinien)<br/>
+    • <strong>Kryptowährungen:</strong> Bitcoin (BTC), Ethereum (ETH), Litecoin (LTC), Monero (XMR) und weitere<br/>
+    • <strong>Banküberweisung:</strong> In Einzelfällen möglich (siehe Hinweise)
+    <br/><br/>
+    <strong>Hinweise zur Verarbeitung:</strong> PayPal, Karten, Apple Pay/Google Pay und die meisten Krypto-Zahlungen werden in der Regel <strong>umgehend bestätigt</strong>. Banküberweisung nur nach Rücksprache (Dauer: mehrere Werktage).
+    <br/><br/>
+    <strong>Richtlinien für Prepaid-Zahlungen:</strong><br/>
+    • <strong>Paysafecard:</strong> Nur in Deutschland ausgestellte Codes. Nicht über myPaysafecard erworbene Codes verwenden.<br/>
+    • <strong>Amazon-Geschenkkarten:</strong> Nicht im Amazon Online-Shop kaufen. Erlaubte Kaufquellen: <strong>Dundle</strong> oder Einzelhandel (z. B. Tankstelle, Supermarkt).`
+  },
+  {
+    question: "Benötige ich einen VPN-Dienst?",
+    answer: `In den meisten Fällen ist ein VPN <strong>nicht erforderlich</strong>. Gelegentlich kann es jedoch sinnvoll sein, ein VPN zu nutzen, um regionale Einschränkungen zu umgehen oder zusätzliche Stabilität und Privatsphäre zu erhalten.
+    <br/><br/>
+    <strong>Empfohlene Hardware für das beste Erlebnis</strong><br/>
+    • <strong>Top-Empfehlung:</strong> Gloriaforce RTX DUO – High-End-Performance, optimierte IPTV-App und Plug-&-Play-Komfort<br/>
+    • <strong>Alternative:</strong> Formuler Z11 Pro Max – bewährt und leistungsstark
+    <br/><br/>
+    <strong>Option: VPN-Upgrade beim Bestellen</strong><br/>
+    • <strong>Einfach hinzubuchen:</strong> Das VPN-Upgrade kann während der Bestellung ausgewählt werden<br/>
+    • <strong>Automatisch aktiv:</strong> Der VPN-Schutz wird direkt auf Ihrem Zugang aktiviert – Sie müssen nichts einrichten<br/>
+    • <strong>Ideal bei Bedarf:</strong> Praktisch zum Umgehen regionaler Sperren und für mehr Privatsphäre
+    <br/><br/>
+    <a href="https://login.6iptv.cc/store/streaming-box" target="_blank" class="text-brand-600 hover:text-brand-700 font-bold underline decoration-brand-300 underline-offset-2">Schau dir unsere Streaming Box empfehlung an</a>`
+  },
+  {
+    question: "Welche App wird für mein Gerät empfohlen?",
+    answer: `<strong>App-Auswahl & Empfehlungen</strong><br/>
+    Sie haben freie App-Wahl – die Nutzung unserer hauseigenen 6IPTV-App ist <strong>nicht zwingend erforderlich</strong>. Unser Service ist mit allen gängigen IPTV-Apps kompatibel.
+    <br/><br/>
+    <strong>Beste Erfahrung auf empfohlenen Geräten</strong><br/>
+    • <strong>Top-Empfehlung:</strong> Gloriaforce RTX DUO – kommt mit <strong>Appforce II</strong> ab Werk vorinstalliert und ist perfekt auf das Gerät und unseren Dienst optimiert (Plug-&-Play, höchste Stabilität, flüssige Bedienung).
+    <br/><br/>
+    <strong>Weitere App-Hinweise</strong><br/>
+    • <strong>Fire TV Stick:</strong> Wir empfehlen die <strong>6IPTV-App</strong> für eine einfache Einrichtung und ein optimiertes Streaming-Erlebnis<br/>
+    • <strong>Andere Geräte/Apps:</strong> Der Dienst läuft auf vielen Lösungen – wählen Sie die App, die Ihren Vorlieben entspricht
+    <br/><br/>
+    <strong>Kostenlose Beratung</strong><br/>
+    Sie sind unsicher, welche App für Ihr Gerät am besten ist? Unser <strong>Live-Chat</strong> berät Sie kostenlos und hilft bei der Auswahl sowie der Einrichtung – direkt auf unserer Website.
+    <br/><br/>
+    <strong>Tipp:</strong> Für das reibungsloseste Erlebnis nutzen Sie die herstelleroptimierten Apps auf den empfohlenen Geräten.`
+  },
+  {
+    question: "Ist mein Fire TV Stick geeignet für IPTV?",
+    answer: `Grundsätzlich können Sie Ihren Fire TV Stick für den Empfang von IPTV nutzen. Bitte beachten Sie jedoch: Der Stick ist ein sehr kostengünstiges Gerät – das zeigt sich oft in <strong>begrenzter Leistung</strong>, längeren Ladezeiten und gelegentlichen Stabilitätsproblemen bei intensiver Nutzung.
+    <br/><br/>
+    <strong>Empfehlung für langfristige Nutzung</strong><br/>
+    <strong>Gloriaforce RTX DUO</strong> – deutlich mehr Rechenleistung als ein günstiger Fire TV Stick, optimiert für unseren Dienst und mit <strong>Appforce II</strong> ab Werk vorinstalliert (Plug-&-Play, schnelle Menüs, hohe Stabilität).
+    <br/><br/>
+    <strong>Warum sich ein Upgrade lohnt</strong><br/>
+    • <strong>Performance & Zukunftssicherheit:</strong> Schnellere Navigation, stabile Streams und Reserven für künftige Updates<br/>
+    • <strong>Bild- & Tonqualität:</strong> Hochwertige Hardware ermöglicht es, die volle Qualität von 6IPTV auszuschöpfen<br/>
+    • <strong>Komfort:</strong> Herstelleroptimierte App ist vorinstalliert – auspacken, anschließen, loslegen
+    <br/><br/>
+    <a href="https://login.6iptv.cc/store/streaming-box" target="_blank" class="text-brand-600 hover:text-brand-700 font-bold underline decoration-brand-300 underline-offset-2">Gloriaforce RTX DUO jetzt ansehen</a>`
+  }
+];
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqs.map(faq => ({
+    "@type": "Question",
+    "name": faq.question,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": faq.answer.replace(/<[^>]*>?/gm, '') // Strip HTML for schema
+    }
+  }))
+};
+---
+
+<section id="faq" class="py-24 bg-slate-50 relative overflow-hidden">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl md:text-5xl font-bold text-slate-900 mb-6">Häufig gestellte Fragen</h2>
+      <p class="text-xl text-slate-600 max-w-2xl mx-auto">
+        Alles was Sie über unseren Service wissen müssen.
+      </p>
+    </div>
+
+    <div class="space-y-4">
+      {faqs.map((faq, index) => (
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden group hover:shadow-md transition-all duration-300">
+          <details class="group">
+            <summary class="flex items-center justify-between p-6 cursor-pointer list-none">
+              <h3 class="text-lg font-bold text-slate-900 pr-8">{faq.question}</h3>
+              <span class="text-brand-600 transition-transform duration-300 group-open:rotate-180">
+                <ChevronDown className="w-6 h-6" />
+              </span>
+            </summary>
+            <div class="px-6 pb-6 text-slate-600 leading-relaxed animate-fade-in">
+              <div class="prose prose-slate max-w-none" set:html={faq.answer} />
+            </div>
+          </details>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- JSON-LD Schema for SEO -->
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+</section>
+
+<style>
+  details > summary {
+    list-style: none;
+  }
+  details > summary::-webkit-details-marker {
+    display: none;
+  }
+</style>

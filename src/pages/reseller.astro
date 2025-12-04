@@ -116,10 +116,10 @@ const pageDescription = seo.description || "Werden Sie SchauAlles Partner. Bauen
       </p>
       
       <div class="flex flex-col sm:flex-row gap-4 justify-center">
-        <a href="#chatraChatExpanded" class="inline-flex items-center justify-center px-8 py-4 text-lg font-bold rounded-xl text-slate-900 bg-brand-400 hover:bg-brand-300 transition-all transform hover:scale-105 shadow-xl shadow-brand-500/20">
+        <button onclick="$crisp.push(['do', 'chat:open']);" class="inline-flex items-center justify-center px-8 py-4 text-lg font-bold rounded-xl text-slate-900 bg-brand-400 hover:bg-brand-300 transition-all transform hover:scale-105 shadow-xl shadow-brand-500/20 cursor-pointer">
           Jetzt Partner werden
           <ChevronRight className="ml-2 h-5 w-5" />
-        </a>
+        </button>
       </div>
     </div>
   </section>
@@ -378,7 +378,7 @@ const pageDescription = seo.description || "Werden Sie SchauAlles Partner. Bauen
       <div class="mt-12 text-center p-6 bg-blue-50 rounded-2xl border border-blue-100">
         <p class="text-slate-700 font-medium mb-2">Sie haben nicht die richtige Antwort gefunden?</p>
         <p class="text-slate-600 mb-4">Hier finden Sie weitere Informationen oder kontaktieren Sie uns direkt.</p>
-        <a href="#chatraChatExpanded" class="text-brand-600 font-bold hover:text-brand-700 hover:underline">Kontakt aufnehmen &rarr;</a>
+        <button onclick="$crisp.push(['do', 'chat:open']);" class="text-brand-600 font-bold hover:text-brand-700 hover:underline cursor-pointer">Kontakt aufnehmen &rarr;</button>
       </div>
     </div>
   </section>
@@ -401,10 +401,10 @@ const pageDescription = seo.description || "Werden Sie SchauAlles Partner. Bauen
       </p>
       
       <div class="flex flex-col sm:flex-row gap-6 justify-center">
-        <a href="#chatraChatExpanded" class="flex items-center justify-center gap-3 px-10 py-5 text-lg font-bold rounded-2xl bg-white text-brand-900 hover:bg-brand-50 transition-all shadow-2xl shadow-brand-500/20 hover:-translate-y-1 hover:shadow-brand-500/30">
+        <button onclick="$crisp.push(['do', 'chat:open']);" class="flex items-center justify-center gap-3 px-10 py-5 text-lg font-bold rounded-2xl bg-white text-brand-900 hover:bg-brand-50 transition-all shadow-2xl shadow-brand-500/20 hover:-translate-y-1 hover:shadow-brand-500/30 cursor-pointer">
           <MessageCircle className="w-6 h-6" />
           Jetzt Partner werden
-        </a>
+        </button>
       </div>
       
       <p class="mt-8 text-sm text-slate-500">

@@ -1,7 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import PricingTable from '../components/PricingTable.jsx';
-import TrendingSection from '../components/TrendingSection.jsx';
+import TrendingSection from '../components/TrendingSection.astro';
 import HeroStats from '../components/HeroStats.jsx';
 import SportsSection from '../components/SportsSection.astro';
 import FAQ from '../components/FAQ.astro';
@@ -142,7 +142,7 @@ const pageDescription = seo.description;
   </section>
 
   <!-- Trending Section -->
-  <TrendingSection client:load />
+  <TrendingSection />
 
   <!-- Sports Section -->
   <SportsSection />

@@ -20,22 +20,40 @@ const { title, description = "Premium IPTV Service - SchauAlles.com" } = Astro.p
 		<meta name="generator" content={Astro.generator} />
 		<meta name="description" content={description} />
 		<title>{title}</title>
+		
+		<!-- DNS Prefetch & Preconnect for faster external resource loading -->
+		<link rel="dns-prefetch" href="https://fonts.googleapis.com">
+		<link rel="dns-prefetch" href="https://fonts.gstatic.com">
+		<link rel="dns-prefetch" href="https://client.crisp.chat">
+		<link rel="dns-prefetch" href="https://image.tmdb.org">
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		
+		<!-- Async load fonts -->
 		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 		<noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"></noscript>
     
-    <!-- Crisp Chat -->
+    <!-- Crisp Chat - Deferred loading -->
     <script type="text/javascript">
         window.$crisp=[];
         window.CRISP_WEBSITE_ID="41b92438-0c10-467f-a1b7-4302adba3316";
-        (function(){
-            d=document;
-            s=d.createElement("script");
-            s.src="https://client.crisp.chat/l.js";
-            s.async=1;
-            d.getElementsByTagName("head")[0].appendChild(s);
-        })();
+        
+        // Defer Crisp loading until after page load
+        if (document.readyState === 'complete') {
+            loadCrisp();
+        } else {
+            window.addEventListener('load', loadCrisp);
+        }
+        
+        function loadCrisp() {
+            setTimeout(function() {
+                var d = document;
+                var s = d.createElement("script");
+                s.src = "https://client.crisp.chat/l.js";
+                s.async = 1;
+                d.getElementsByTagName("head")[0].appendChild(s);
+            }, 1000); // Load 1 second after page load
+        }
     </script>
     <!-- /Crisp Chat -->
   </head>

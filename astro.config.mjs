@@ -7,15 +7,7 @@ import react from '@astrojs/react';
 // https://astro.build/config
 export default defineConfig({
   vite: {
-    plugins: [tailwindcss()],
-    ssr: {
-      external: ['mysql2']
-    },
-    build: {
-      rollupOptions: {
-        external: ['mysql2', 'mysql2/promise']
-      }
-    }
+    plugins: [tailwindcss()]
   },
 
   integrations: [react()]

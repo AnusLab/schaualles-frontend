@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Play, X, Star, Calendar } from 'lucide-react';
 
 const BACKDROP_BASE_URL = "https://image.tmdb.org/t/p/w1280";
 
 export default function TrendingModal({ trends, imageBaseUrl }) {
   const [selectedMovie, setSelectedMovie] = useState(null);
+  const [isClosing, setIsClosing] = useState(false);
 
   const handleMovieClick = (movie) => {
     setSelectedMovie(movie);
@@ -12,9 +13,24 @@ export default function TrendingModal({ trends, imageBaseUrl }) {
   };
 
   const closeModal = () => {
-    setSelectedMovie(null);
-    document.body.style.overflow = 'unset';
+    setIsClosing(true);
+    setTimeout(() => {
+      setSelectedMovie(null);
+      setIsClosing(false);
+      document.body.style.overflow = 'unset';
+    }, 200);
   };
+
+  // Close on Escape key
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape' && selectedMovie) {
+        closeModal();
+      }
+    };
+    window.addEventListener('keydown', handleEscape);
+    return () => window.removeEventListener('keydown', handleEscape);
+  }, [selectedMovie]);
 
   return (
     <>
@@ -63,18 +79,19 @@ export default function TrendingModal({ trends, imageBaseUrl }) {
 
       {/* Detail Modal */}
       {selectedMovie && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+        <div className={`fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 ${isClosing ? 'animate-fade-out' : 'animate-fade-in'}`}>
           <div 
-            className="absolute inset-0 bg-black/80 backdrop-blur-sm transition-opacity"
+            className={`absolute inset-0 bg-black/85 backdrop-blur-md transition-all duration-300 ${isClosing ? 'opacity-0' : 'opacity-100'}`}
             onClick={closeModal}
           />
           
-          <div className="relative w-full max-w-5xl bg-slate-900 rounded-3xl overflow-hidden shadow-2xl ring-1 ring-white/10 flex flex-col md:flex-row animate-fade-in-up max-h-[90vh] overflow-y-auto md:overflow-hidden">
+          <div className={`relative w-full max-w-5xl bg-slate-900 rounded-3xl overflow-hidden shadow-2xl ring-1 ring-white/10 flex flex-col md:flex-row max-h-[90vh] overflow-y-auto md:overflow-hidden transition-all duration-300 ${isClosing ? 'scale-95 opacity-0' : 'scale-100 opacity-100 animate-scale-in'}`}>
             <button 
               onClick={closeModal}
-              className="absolute top-4 right-4 z-20 p-2 rounded-full bg-black/50 text-white/70 hover:text-white hover:bg-black/70 transition-colors"
+              className="absolute top-4 right-4 z-20 p-3 rounded-full bg-black/60 backdrop-blur-sm text-white/80 hover:text-white hover:bg-black/80 hover:scale-110 transition-all duration-200 shadow-lg hover:shadow-xl group"
+              aria-label="Schließen"
             >
-              <X className="w-6 h-6" />
+              <X className="w-5 h-5 transition-transform group-hover:rotate-90" />
             </button>
 
             {/* Backdrop / Trailer Area */}
@@ -118,16 +135,19 @@ export default function TrendingModal({ trends, imageBaseUrl }) {
                   <a 
                     href="#pricing" 
                     onClick={closeModal}
-                    className="w-full py-4 px-6 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-bold text-center transition-all shadow-lg shadow-brand-500/20 flex items-center justify-center gap-2"
+                    className="group w-full py-4 px-6 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-bold text-center transition-all duration-200 shadow-lg shadow-brand-500/20 hover:shadow-brand-500/40 hover:scale-105 flex items-center justify-center gap-2"
                   >
-                    <Play className="w-5 h-5 fill-current" />
+                    <Play className="w-5 h-5 fill-current transition-transform group-hover:scale-110" />
                     Jetzt Ansehen
                   </a>
                   <button 
                     onClick={closeModal}
-                    className="w-full py-4 px-6 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-medium text-center transition-colors"
+                    className="group w-full py-4 px-6 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white font-medium text-center transition-all duration-200 border border-slate-700/50 hover:border-slate-600 hover:shadow-lg"
                   >
-                    Schließen
+                    <span className="inline-flex items-center gap-2">
+                      Schließen
+                      <X className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </span>
                   </button>
                 </div>
                 

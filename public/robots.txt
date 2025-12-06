@@ -1,33 +1,25 @@
 # Robots.txt for SchauAlles.com
 # Allow all search engines to crawl the site
 
-# Block bad bots first
+# Block bad bots
 User-agent: AhrefsBot
-Disallow: /
-
 User-agent: SemrushBot
-Disallow: /
-
 User-agent: DotBot
 Disallow: /
 
-# Googlebot configuration
+# Googlebot - full access except admin/api
 User-agent: Googlebot
-Allow: /
 Disallow: /admin/
 Disallow: /api/
-Crawl-delay: 0
 
-# Bingbot configuration
+# Bingbot - full access except admin/api
 User-agent: Bingbot
-Allow: /
 Disallow: /admin/
 Disallow: /api/
 Crawl-delay: 1
 
-# All other bots
+# All other search engines
 User-agent: *
-Allow: /
 Disallow: /admin/
 Disallow: /api/
 

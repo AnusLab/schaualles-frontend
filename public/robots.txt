@@ -9,6 +9,7 @@ Disallow: /
 
 # Googlebot - full access except admin/api
 User-agent: Googlebot
+Allow: /
 Disallow: /admin/
 Disallow: /api/
 
@@ -20,6 +21,7 @@ Crawl-delay: 1
 
 # All other search engines
 User-agent: *
+Allow: /
 Disallow: /admin/
 Disallow: /api/
 

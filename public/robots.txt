@@ -7,9 +7,9 @@ Allow: /
 # Disallow admin and private areas
 Disallow: /admin/
 Disallow: /api/
-Disallow: /_astro/
 
-# Allow important pages
+# Explicitly allow sitemap and important pages
+Allow: /sitemap.xml
 Allow: /blog/
 Allow: /hilfe/
 Allow: /kontakt

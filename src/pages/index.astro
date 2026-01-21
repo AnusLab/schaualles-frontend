@@ -42,13 +42,34 @@ const features = [
 ];
 
 import { getSeo } from '../lib/seo';
+import SchemaOrg from '../components/SchemaOrg.astro';
 
 const seo = await getSeo('home') || {};
-const pageTitle = seo.title || "SchauAlles.com - Premium IPTV Service | Beste Qualität & Preise";
-const pageDescription = seo.description;
+const pageTitle = seo.title || "IPTV Deutschland - Premium IPTV Service | SchauAlles.com";
+const pageDescription = seo.description || "Premium IPTV für Deutschland ⭐ 15.000+ HD-Sender ✓ 4K Qualität ✓ 99,9% Uptime ✓ Deutscher 24/7 Support ✓ Keine Vertragsbindung. Jetzt testen!";
+
+// Service Schema for Homepage
+const serviceSchema = {
+  "name": "Premium IPTV Service",
+  "description": "Premium IPTV Service für Deutschland mit über 15.000 HD-Sendern, 4K Qualität und 99,9% Uptime Garantie",
+  "offers": {
+    "@type": "AggregateOffer",
+    "priceCurrency": "EUR",
+    "lowPrice": "9.99",
+    "highPrice": "99.99",
+    "offerCount": "3"
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.8",
+    "reviewCount": "1250"
+  }
+};
 ---
 
 <Layout title={pageTitle} description={pageDescription}>
+  <!-- Structured Data for SEO -->
+  <SchemaOrg type="Service" data={serviceSchema} slot="head" />
   <!-- Hero Section -->
   <section class="relative min-h-screen flex items-center overflow-hidden bg-slate-50">
     <div class="absolute inset-0 bg-gradient-to-br from-brand-50 via-white to-slate-100"></div>

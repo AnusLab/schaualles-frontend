@@ -81,13 +81,80 @@ const features = [
 ];
 
 import { getSeo } from '../lib/seo';
+import SchemaOrg from '../components/SchemaOrg.astro';
 
 const seo = await getSeo('reseller') || {};
-const pageTitle = seo.title || "Reseller werden | SchauAlles.com Partnerprogramm";
-const pageDescription = seo.description || "Werden Sie SchauAlles Partner. Bauen Sie sich ein passives Einkommen auf mit Europas führendem IPTV-Service.";
+const pageTitle = seo.title || "IPTV Reseller werden - Partnerprogramm | SchauAlles.com";
+const pageDescription = seo.description || "Werden Sie IPTV Reseller bei SchauAlles.com ⭐ Hohe Provisionen ✓ Keine monatlichen Gebühren ✓ Deutscher 24/7 Support ✓ Sofortiger Start möglich. Jetzt Partner werden!";
+
+// FAQ Schema for SEO
+const faqSchema = {
+  questions: [
+    {
+      "@type": "Question",
+      "name": "Kann ich IPTV Reseller werden?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Grundsätzlich kann jeder IPTV-Reseller werden, jedoch sollten Sie über etwas Erfahrung in diesem Bereich verfügen, da Sie für die Betreuung Ihrer Kunden zuständig sind."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Wie kann ich als Reseller bezahlen?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Als Reseller haben Sie die Möglichkeit, Ihr Guthaben mit verschiedenen Kryptowährungen wie Bitcoin (BTC), Litecoin (LTC), Monero (XMR) und vielen anderen aufzuladen. Darüber hinaus besteht die Option, anonyme Gutscheinkarten zu verwenden."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Bekomme ich als Reseller Support?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Sie können uns jederzeit über unseren Live-Support (24/7 erreichbar) kontaktieren. Zusätzlich steht Ihnen auch ein dedizierter Account Manager über Telegram zur Verfügung."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Kann ein Reseller Konto ablaufen?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Das Reseller-Konto hat keine Ablaufzeit. Wenn Ihre aufgeladenen Credits aufgebraucht sind, können Sie keine weiteren Zugänge für Ihre Kunden erstellen. In diesem Fall müssen Sie Ihr Konto erneut aufladen."
+      }
+    }
+  ]
+};
+
+// Service Schema for SEO
+const serviceSchema = {
+  "name": "IPTV Reseller Programm",
+  "description": "Werden Sie IPTV Reseller und verdienen Sie mit unserem Partnerprogramm. Hohe Provisionen, keine monatlichen Gebühren und deutscher Support.",
+  "offers": {
+    "@type": "Offer",
+    "availability": "https://schema.org/InStock",
+    "priceCurrency": "EUR"
+  },
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "IPTV Reseller Services",
+    "itemListElement": [
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "IPTV Reseller Panel",
+          "description": "Eigenes Reseller-Panel zur Verwaltung Ihrer Kunden"
+        }
+      }
+    ]
+  }
+};
 ---
 
 <Layout title={pageTitle} description={pageDescription}>
+  <!-- Structured Data for SEO -->
+  <SchemaOrg type="Service" data={serviceSchema} slot="head" />
+  <SchemaOrg type="FAQPage" data={faqSchema} slot="head" />
   <!-- Hero Section -->
   <section class="relative pt-32 pb-24 lg:pt-48 lg:pb-32 overflow-hidden bg-slate-900">
     <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-brand-950 to-slate-900"></div>

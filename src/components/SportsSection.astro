@@ -1,22 +1,49 @@
 ---
-import { Image } from 'astro:assets';
-import { Trophy, Tv, Zap, PlayCircle, Medal, Activity } from 'lucide-react';
-
-// Import images
-import bundesligaImg from '../assets/banners/0ec3ed9ce_sports-bundesliga.jpg';
-import championsLeagueImg from '../assets/banners/3e2c0ddac_sports-champions-league.jpg';
-import premierLeagueImg from '../assets/banners/15d48d972_sports-premier-league.jpg';
-import f1Img from '../assets/banners/0c5a7f50e_sports-formula1-v2.png';
-import nbaImg from '../assets/banners/06bc7dfc8_sports-nba.jpg';
-import ufcImg from '../assets/banners/0ceb8ad9c_sports-ufc-v2.png';
+import { Trophy, Tv, Zap, PlayCircle, Medal, Activity, Flame, Target, Dribbble } from 'lucide-react';
 
 const leagues = [
-  { name: 'Bundesliga', image: bundesligaImg },
-  { name: 'Champions League', image: championsLeagueImg },
-  { name: 'Premier League', image: premierLeagueImg },
-  { name: 'Formel 1', image: f1Img },
-  { name: 'NBA', image: nbaImg },
-  { name: 'UFC', image: ufcImg },
+  { 
+    name: 'Bundesliga', 
+    icon: Trophy,
+    gradient: 'from-red-500 to-red-600',
+    bgGradient: 'from-red-50 to-red-100',
+    description: 'Deutsche Fußball-Liga'
+  },
+  { 
+    name: 'Champions League', 
+    icon: Medal,
+    gradient: 'from-blue-600 to-blue-700',
+    bgGradient: 'from-blue-50 to-blue-100',
+    description: 'UEFA Champions League'
+  },
+  { 
+    name: 'Premier League', 
+    icon: Activity,
+    gradient: 'from-purple-600 to-purple-700',
+    bgGradient: 'from-purple-50 to-purple-100',
+    description: 'Englische Premier League'
+  },
+  { 
+    name: 'Formel 1', 
+    icon: Zap,
+    gradient: 'from-red-600 to-orange-600',
+    bgGradient: 'from-red-50 to-orange-50',
+    description: 'Motorsport'
+  },
+  { 
+    name: 'NBA', 
+    icon: Dribbble,
+    gradient: 'from-orange-500 to-orange-600',
+    bgGradient: 'from-orange-50 to-orange-100',
+    description: 'Basketball'
+  },
+  { 
+    name: 'UFC', 
+    icon: Flame,
+    gradient: 'from-slate-700 to-slate-900',
+    bgGradient: 'from-slate-50 to-slate-100',
+    description: 'Mixed Martial Arts'
+  },
 ];
 
 const features = [
@@ -65,17 +92,22 @@ const features = [
     <!-- Leagues Grid -->
     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 mb-16">
       {leagues.map((league) => (
-        <div class="group bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex items-center justify-center hover:shadow-xl hover:border-brand-100 hover:-translate-y-1 transition-all duration-300 h-32 md:h-40 relative overflow-hidden">
-          <div class="absolute inset-0 bg-gradient-to-br from-slate-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-          <Image 
-            src={league.image} 
-            alt={league.name}
-            width={200}
-            height={200}
-            loading="lazy"
-            decoding="async"
-            class="w-auto h-16 md:h-20 object-contain relative z-10 filter grayscale group-hover:grayscale-0 transition-all duration-300 transform group-hover:scale-110"
-          />
+        <div class={`group bg-gradient-to-br ${league.bgGradient} rounded-2xl p-6 shadow-sm border border-slate-200 hover:shadow-xl hover:border-slate-300 hover:-translate-y-2 transition-all duration-300 relative overflow-hidden`}>
+          <div class="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
+          
+          <div class="relative z-10 flex flex-col items-center justify-center text-center h-full min-h-[140px]">
+            <div class={`w-14 h-14 rounded-xl bg-gradient-to-br ${league.gradient} flex items-center justify-center mb-3 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+              <league.icon className="w-7 h-7 text-white" />
+            </div>
+            
+            <h3 class="font-bold text-slate-900 text-sm mb-1 leading-tight">
+              {league.name}
+            </h3>
+            
+            <p class="text-xs text-slate-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              {league.description}
+            </p>
+          </div>
         </div>
       ))}
     </div>

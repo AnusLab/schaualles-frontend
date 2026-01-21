@@ -4,10 +4,10 @@ import { getSeo } from '../lib/seo';
 
 const seo = await getSeo('legal') || {};
 const pageTitle = "Impressum | SchauAlles.com";
-const pageDescription = "Impressum und rechtliche Informationen von SchauAlles.com";
+const pageDescription = "Impressum und rechtliche Informationen von SchauAlles.com - Angaben gemäß § 5 TMG, Kontaktdaten und Informationen zum Betreiber unseres IPTV Services.";
 ---
 
-<Layout title={pageTitle} description={pageDescription}>
+<Layout title={pageTitle} description={pageDescription} noindex={true}>
   <div class="min-h-screen bg-white pt-32 pb-24">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
       <h1 class="text-4xl font-bold text-slate-900 mb-8">Impressum</h1>

@@ -3,10 +3,10 @@ import Layout from '../layouts/Layout.astro';
 import { getSeo } from '../lib/seo';
 
 const pageTitle = "Datenschutzerklärung | SchauAlles.com";
-const pageDescription = "Informationen zum Datenschutz bei SchauAlles.com";
+const pageDescription = "Datenschutzerklärung von SchauAlles.com - Informationen zur Datenerfassung, Cookies, Analyse-Tools und Ihren Rechten gemäß DSGVO. Transparenter Umgang mit Ihren Daten.";
 ---
 
-<Layout title={pageTitle} description={pageDescription}>
+<Layout title={pageTitle} description={pageDescription} noindex={true}>
   <div class="min-h-screen bg-white pt-32 pb-24">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
       <h1 class="text-4xl font-bold text-slate-900 mb-8">Datenschutzerklärung</h1>

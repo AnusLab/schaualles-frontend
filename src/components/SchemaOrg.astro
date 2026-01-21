@@ -1,0 +1,88 @@
+---
+interface Props {
+  type: 'Organization' | 'Service' | 'FAQPage' | 'Article' | 'BreadcrumbList' | 'WebSite';
+  data: any;
+}
+
+const { type, data } = Astro.props;
+
+const schemas = {
+  Organization: {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "SchauAlles.com",
+    "url": "https://schaualles.com",
+    "logo": "https://schaualles.com/favicon.svg",
+    "description": "Premium IPTV Service für Deutschland - Über 15.000 HD-Sender mit 99,9% Uptime",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "customer support",
+      "availableLanguage": ["de", "German"],
+      "areaServed": "DE"
+    },
+    "sameAs": [
+      "https://schaualles.com"
+    ],
+    ...data
+  },
+  
+  Service: {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "serviceType": "IPTV Service",
+    "provider": {
+      "@type": "Organization",
+      "name": "SchauAlles.com"
+    },
+    "areaServed": {
+      "@type": "Country",
+      "name": "Deutschland"
+    },
+    "availableLanguage": "de",
+    ...data
+  },
+  
+  FAQPage: {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": data.questions || []
+  },
+  
+  Article: {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+      "@type": "Organization",
+      "name": "SchauAlles.com",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://schaualles.com/favicon.svg"
+      }
+    },
+    ...data
+  },
+  
+  BreadcrumbList: {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": data.items || []
+  },
+  
+  WebSite: {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "SchauAlles.com",
+    "url": "https://schaualles.com",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://schaualles.com/search?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    },
+    ...data
+  }
+};
+
+const schema = schemas[type];
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />
